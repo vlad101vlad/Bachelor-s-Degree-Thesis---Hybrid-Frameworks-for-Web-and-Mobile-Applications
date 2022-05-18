@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import { isPlatform } from '@ionic/angular';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {isPlatform, MenuController, Platform} from '@ionic/angular';
 import categoryData from '../../../assets/company/categories.json';
 
 @Component({
@@ -29,7 +29,8 @@ export class MenuPage implements OnInit {
   ];
   title = 'Home';
 
-  constructor() {
+  constructor(private platform: Platform,
+              private menuController: MenuController) {
   }
 
   ngOnInit() {
@@ -38,9 +39,26 @@ export class MenuPage implements OnInit {
       '--header-height',
       `${headerHeight}px`
     );
+    const width = this.platform.width();
+    this.toggleMenu(width);
   }
 
   setTitle(title) {
     this.title = title;
   }
+
+  @HostListener('window:resize', ['$event'])
+  private onResize(event) {
+    const newWidth = event.target.innerWidth;
+    this.toggleMenu(newWidth);
+  }
+
+  toggleMenu(width) {
+    if (width > 768) {
+      this.menuController.enable(false, 'myMenu');
+    } else {
+      this.menuController.enable(true, 'myMenu');
+    }
+  }
+
 }
