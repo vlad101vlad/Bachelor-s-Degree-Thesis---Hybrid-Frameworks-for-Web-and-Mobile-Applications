@@ -1,9 +1,58 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>menu</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-menu contentId="main" menuId="myMenu" side="start">
 
-<ion-content>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-</ion-content>
+  <ion-content>
+    <div *ngFor="let item of menuItems">
+      <ion-menu-toggle *ngIf="!item.children">
+        <ion-item
+          button
+          (click)="setTitle(item.title)"
+          routerLink="item.path"
+          routerDirection="root"
+          routerLinkActive="active-item"
+          [routerLinkActiveOptions]="{exact: true}"
+        >
+          <ion-icon [name]="item.icon" slot="start"></ion-icon>
+          {{ item.title }}
+        </ion-item>
+      </ion-menu-toggle>
+
+      <ion-accordion-group *ngIf="item.children">
+        <ion-accordion>
+          <ion-item slot="header">
+            <ion-icon [name]="item.icon" slot="start"></ion-icon>
+            <ion-label>{{item.title}}</ion-label>
+          </ion-item>
+
+          <ion-list slot="content">
+            <ion-menu-toggle>
+              <ion-item
+                button
+                *ngFor="let cat of item.children"
+                (click)="setTitle(cat.title)"
+                [routerLink]="item.path"
+                [queryParams]="{ category: cat.slug }"
+                lines="none"
+                routerDirection="root"
+              >
+                <ion-label>{{ cat.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+        </ion-accordion>
+      </ion-accordion-group>
+    </div>
+
+
+  </ion-content>
+
+</ion-menu>
+
+<app-header [title]="title"></app-header>
+
+<ion-router-outlet id="main"></ion-router-outlet>

@@ -1,0 +1,84 @@
+<ion-header class="mobile-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="myMenu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-row>
+  <!--  Logo-->
+  <ion-col size="2" class="ion-align-items-center">
+    <img src="./assets/company/imgs/logo.svg" width="50px" alt="Logo image">
+  </ion-col>
+
+  <!--  Navigation-->
+  <ion-col size="7" class="ion-text-left">
+    <!--  Home-->
+    <ion-button
+      fill="clear"
+      color="dark"
+      routerLink="/"
+      routerDirection="root"
+      routerLinkActive="active-item"
+      [routerLinkActiveOptions]="{exact: true}"
+    >
+      Home
+    </ion-button>
+
+    <!--  Products-->
+    <ion-button
+      #productButton
+      (mouseenter)="dropdown=true"
+      (mouseleave)="hideDropdown($event)"
+      fill="clear"
+      color="dark"
+      routerLink="/products"
+      routerDirection="root"
+      routerLinkActive="active-item"
+    >
+      Products
+      <ion-icon
+        slot="end"
+        [name]="dropdown ? 'chevron-up' : 'chevron-down'"
+      ></ion-icon>
+    </ion-button>
+
+    <div *ngIf="dropdown" class="dropdown" (mouseleave)="dropdown = false">
+      <ion-item
+        *ngFor="let category of categories"
+        (click)="dropdown = false"
+        routerLink="/products"
+        [queryParams]="{ category: category.slug }"
+        lines="none"
+        routerDirection="root"
+      >
+        {{category.title}}
+      </ion-item>
+    </div>
+
+    <ion-button
+      fill="clear"
+      color="dark"
+      routerLink="/about"
+      routerDirection="root"
+      routerLinkActive="active-item"
+    >
+      About
+    </ion-button>
+  </ion-col>
+
+  <!--  Cart icon-->
+  <ion-col size="3" class="ion-text-right">
+    <ion-button fill="clear" color="dark">
+      <ion-icon slot="icon-only" name="cart"></ion-icon>
+    </ion-button>
+  </ion-col>
+</ion-row>

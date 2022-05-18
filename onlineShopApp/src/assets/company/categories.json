@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "title":"Bestseller",
+        "slug": "bestseller"
+    },
+    {
+        "id": 2,
+        "title":"Special",
+        "slug": "special"
+    },
+    {
+        "id": 3,
+        "title":"Vegetarian",
+        "slug": "vegetarian"
+    },
+    {
+        "id": 4,
+        "title":"For Kids",
+        "slug": "for-kids"
+    }
+]

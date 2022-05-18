@@ -1,0 +1,258 @@
+[
+    {
+      "id": "619a34d077cd980ebdfb73ad",
+      "price": "23.85",
+      "img": "./assets/company/imgs/1.jpg",
+      "title": "Salame",
+      "desc": "quis elit enim minim ipsum mollit non ex",
+      "category": 1
+    },
+    {
+      "id": "619a34d059ef2becf48520b6",
+      "price": "15.31",
+      "img": "./assets/company/imgs/2.jpg",
+      "title": "Salame special",
+      "desc": "ea velit sint in duis Lorem aute tempor",
+      "category": 4
+    },
+    {
+      "id": "619a34d01d512e9f0c17b8fd",
+      "price": "16.49",
+      "img": "./assets/company/imgs/3.jpg",
+      "title": "Tonno",
+      "desc": "incididunt nulla dolore laboris id deserunt minim enim",
+      "category": 4
+    },
+    {
+      "id": "619a34d05e73902077cb7b42",
+      "price": "19.46",
+      "img": "./assets/company/imgs/4.jpg",
+      "title": "Margherita",
+      "desc": "cillum duis culpa laboris ea nulla nisi est",
+      "category": 3
+    },
+    {
+      "id": "619a34d050809af22d7c9970",
+      "price": "21.45",
+      "img": "./assets/company/imgs/5.jpg",
+      "title": "Parmigiano e prosciutto",
+      "desc": "eiusmod consectetur sit occaecat ipsum duis non quis",
+      "category": 2
+    },
+    {
+      "id": "619a34d0fdc62561315dacd0",
+      "price": "23.66",
+      "img": "./assets/company/imgs/6.jpg",
+      "title": "Veggie slice",
+      "desc": "non laborum cupidatat laborum incididunt dolore exercitation est",
+      "category": 3
+    },
+    {
+      "id": "619a34d0657fe8db89dffc17",
+      "price": "13.45",
+      "img": "./assets/company/imgs/7.jpg",
+      "title": "Bombay",
+      "desc": "eu minim do nostrud esse irure laboris et",
+      "category": 1
+    },
+    {
+      "id": "619a34d0e70f84a964797304",
+      "price": "23.51",
+      "img": "./assets/company/imgs/8.jpg",
+      "title": "Onion lover",
+      "desc": "fugiat fugiat sint non velit exercitation occaecat pariatur",
+      "category": 1
+    },
+    {
+      "id": "619a34d05d44a35aba08334b",
+      "price": "11.66",
+      "img": "./assets/company/imgs/9.jpg",
+      "title": "Cheesy crust",
+      "desc": "cillum consequat proident officia irure ipsum ullamco qui",
+      "category": 1
+    },
+    {
+      "id": "619a34d023e42af522bd82c3",
+      "price": "20.07",
+      "img": "./assets/company/imgs/10.jpg",
+      "title": "Cheesy small",
+      "desc": "irure veniam aliqua consequat cupidatat occaecat aliquip commodo",
+      "category": 1
+    },
+    {
+      "id": "619a34d0e4e6991b9c966d16",
+      "price": "17.23",
+      "img": "./assets/company/imgs/11.jpg",
+      "title": "Double cheese",
+      "desc": "aute dolor cupidatat tempor occaecat elit ea reprehenderit",
+      "category": 3
+    },
+    {
+      "id": "619a34d014fd6d10c1f05675",
+      "price": "24.06",
+      "img": "./assets/company/imgs/12.jpg",
+      "title": "Wrapped veggy",
+      "desc": "deserunt incididunt laborum in cupidatat voluptate officia deserunt",
+      "category": 3
+    },
+    {
+      "id": "619a34d04c36c1cf506f197a",
+      "price": "12.14",
+      "img": "./assets/company/imgs/13.jpg",
+      "title": "Traditional",
+      "desc": "non minim in et Lorem nostrud officia occaecat",
+      "category": 2
+    },
+    {
+      "id": "619a34d0b3b433a409a5c32a",
+      "price": "16.18",
+      "img": "./assets/company/imgs/14.jpg",
+      "title": "Flat bread",
+      "desc": "dolor non ullamco deserunt officia Lorem ipsum consectetur",
+      "category": 2
+    },
+    {
+      "id": "619a34d0fdaf1e1e924e4418",
+      "price": "17.68",
+      "img": "./assets/company/imgs/15.jpg",
+      "title": "Individual",
+      "desc": "magna sit ad amet aliqua tempor aliqua magna",
+      "category": 1
+    },
+    {
+      "id": "619a34d09044a37c6beb8b4d",
+      "price": "20.95",
+      "img": "./assets/company/imgs/16.jpg",
+      "title": "Double trouble",
+      "desc": "ullamco aliqua aliquip adipisicing incididunt ea elit est",
+      "category": 2
+    },
+    {
+      "id": "619a34d0d827e65e15cbd288",
+      "price": "20.93",
+      "img": "./assets/company/imgs/17.jpg",
+      "title": "Beef lover",
+      "desc": "nostrud sunt exercitation adipisicing deserunt eiusmod amet ea",
+      "category": 2
+    },
+    {
+      "id": "619a34d072e4854cacc5fb0a",
+      "price": "18.64",
+      "img": "./assets/company/imgs/18.jpg",
+      "title": "Olive garden",
+      "desc": "esse anim elit duis deserunt eiusmod deserunt tempor",
+      "category": 2
+    },
+    {
+      "id": "619a34d01a62a71adcf47605",
+      "price": "17.41",
+      "img": "./assets/company/imgs/19.jpg",
+      "title": "Hawai",
+      "desc": "id sint in excepteur id exercitation labore eu",
+      "category": 3
+    },
+    {
+      "id": "619a34d055e3e5fb0f4a7897",
+      "price": "15.30",
+      "img": "./assets/company/imgs/20.jpg",
+      "title": "Garlic bread",
+      "desc": "aute mollit sint velit voluptate sit laboris adipisicing",
+      "category": 4
+    },
+    {
+      "id": "619a34d07e0af041c4ca26d8",
+      "price": "9.08",
+      "img": "./assets/company/imgs/21.jpg",
+      "title": "Bacon cheesy",
+      "desc": "nulla sunt nulla esse Lorem dolore elit consectetur",
+      "category": 2
+    },
+    {
+      "id": "619a34d0a172ea8becb14652",
+      "price": "12.01",
+      "img": "./assets/company/imgs/22.jpg",
+      "title": "Single slice individual",
+      "desc": "cillum nisi id qui esse ut id ea",
+      "category": 1
+    },
+    {
+      "id": "619a34d0613369acbc88459b",
+      "price": "20.06",
+      "img": "./assets/company/imgs/23.jpg",
+      "title": "Buffalo",
+      "desc": "ullamco Lorem culpa magna deserunt et quis aliquip",
+      "category": 3
+    },
+    {
+      "id": "619a34d0634c84d5a8886018",
+      "price": "16.67",
+      "img": "./assets/company/imgs/24.jpg",
+      "title": "All green",
+      "desc": "qui veniam fugiat deserunt consequat minim Lorem mollit",
+      "category": 4
+    },
+    {
+      "id": "619a34d0421757e819e235cc",
+      "price": "9.76",
+      "img": "./assets/company/imgs/25.jpg",
+      "title": "Calzone",
+      "desc": "est et ipsum eiusmod adipisicing laboris incididunt veniam",
+      "category": 3
+    },
+    {
+      "id": "619a34d007c0b2dc77362a1a",
+      "price": "19.28",
+      "img": "./assets/company/imgs/26.jpg",
+      "title": "Fruity",
+      "desc": "ad aliquip officia anim culpa sit ea enim",
+      "category": 1
+    },
+    {
+      "id": "619a34d0460fa15b94f1b86a",
+      "price": "16.97",
+      "img": "./assets/company/imgs/27.jpg",
+      "title": "Neapolitan",
+      "desc": "deserunt reprehenderit sint et dolor sit esse consequat",
+      "category": 4
+    },
+    {
+      "id": "619a34d04af4947d8c4de153",
+      "price": "15.33",
+      "img": "./assets/company/imgs/28.jpg",
+      "title": "Dinner for two",
+      "desc": "mollit elit dolore nisi magna consectetur anim fugiat",
+      "category": 1
+    },
+    {
+      "id": "619a34d08515fa25e36ed1f4",
+      "price": "24.54",
+      "img": "./assets/company/imgs/29.jpg",
+      "title": "Catering for events",
+      "desc": "ut cupidatat veniam enim cillum occaecat quis proident",
+      "category": 4
+    },
+    {
+      "id": "619a34d046d8a7ef6ad75e21",
+      "price": "20.77",
+      "img": "./assets/company/imgs/30.jpg",
+      "title": "Meal Deal complete",
+      "desc": "anim adipisicing Lorem voluptate do tempor irure ex",
+      "category": 4
+    },
+    {
+      "id": "619a34d00d32bf0a10568626",
+      "price": "11.29",
+      "img": "./assets/company/imgs/31.jpg",
+      "title": "Germany",
+      "desc": "ad consequat minim consequat incididunt tempor ullamco reprehenderit",
+      "category": 2
+    },
+    {
+      "id": "619a34d0f6176fd80c9d24f7",
+      "price": "22.37",
+      "img": "./assets/company/imgs/32.jpg",
+      "title": "Arugula",
+      "desc": "aute dolore irure ut dolor ipsum dolore Lorem",
+      "category": 2
+    }
+  ]
