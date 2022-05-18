@@ -1,0 +1,28 @@
+.hero {
+  background-image: url("../../../assets/company/imgs/hero.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 30vh;
+  width: 100%;
+}
+
+ion-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  padding: 10px;
+  ion-icon {
+    font-size: 64px;
+    margin-bottom: 15px;
+  }
+  ion-text:first-of-type {
+    font-size: x-large;
+    font-weight: 500;
+  }
+  ion-text:last-of-type {
+    padding-top: 15px;
+  }
+}
+
