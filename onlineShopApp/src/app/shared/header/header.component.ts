@@ -1,5 +1,7 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import categoriesData from '../../../assets/company/categories.json';
+import {AnimationController} from '@ionic/angular';
+import {CartService} from '../../services/cart.service';
 
 
 @Component({
@@ -9,13 +11,27 @@ import categoriesData from '../../../assets/company/categories.json';
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('productButton', {read: ElementRef}) productButton: ElementRef;
+  @ViewChild('cartButtonMobile', {read: ElementRef}) cartButtonMobile: ElementRef;
+  @ViewChild('cartButtonWeb', {read: ElementRef}) cartButtonWeb: ElementRef;
+
   @Input() title: string;
   dropdown: boolean;
   categories = categoriesData;
+  cartCount = 0;
 
-  constructor() { }
+  constructor(
+    private animationController: AnimationController,
+    private cartService: CartService
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.cartService.getCartCount().subscribe((value => {
+      if (value > 0) {
+        this.animateCart();
+      }
+      this.cartCount = value;
+    }));
+  }
 
   hideDropdown(event) {
     const xTouch = event.clientX;
@@ -30,4 +46,25 @@ export class HeaderComponent implements OnInit {
 
   }
 
+
+  animateCart() {
+    const keyframes = [
+      { offset: 0, transform: 'scale(1)' },
+      { offset: 0.5, transform: 'scale(1.2)' },
+      { offset: 0.8, transform: 'scale(0.9)' },
+      { offset: 1, transform: 'scale(1)' },
+    ];
+    const cartAnimationWeb = this.animationController
+      .create('web')
+      .addElement(this.cartButtonWeb.nativeElement)
+      .duration(600)
+      .keyframes(keyframes);
+    cartAnimationWeb.play();
+    const cartAnimationMobile = this.animationController
+      .create('mobile')
+      .addElement(this.cartButtonMobile.nativeElement)
+      .duration(600)
+      .keyframes(keyframes);
+    cartAnimationMobile.play();
+  }
 }

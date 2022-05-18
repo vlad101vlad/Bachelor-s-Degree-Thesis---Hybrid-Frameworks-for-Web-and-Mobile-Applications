@@ -5,8 +5,9 @@
     </ion-buttons>
     <ion-title>{{ title }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button #cartButtonMobile>
         <ion-icon slot="icon-only" name="cart"></ion-icon>
+        <ion-badge>{{cartCount}}</ion-badge>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -77,8 +78,9 @@
 
   <!--  Cart icon-->
   <ion-col size="3" class="ion-text-right">
-    <ion-button fill="clear" color="dark">
+    <ion-button fill="clear" color="dark" #cartButtonWeb>
       <ion-icon slot="icon-only" name="cart"></ion-icon>
+      <ion-badge>{{cartCount}}</ion-badge>
     </ion-button>
   </ion-col>
 </ion-row>

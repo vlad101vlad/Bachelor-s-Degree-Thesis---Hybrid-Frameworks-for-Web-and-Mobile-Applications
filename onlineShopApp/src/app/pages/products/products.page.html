@@ -1,9 +1,46 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>products</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-text-center">
+  <ion-text color="dark" class="ion-hide-md-down">
+    <h1>Choose your products</h1>
+  </ion-text>
+  <ion-grid fixed>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-sm="6" size-md="4" *ngFor="let p of products">
+        <ion-card>
+          <div
+            tappable
+            [routerLink]="['/products', p.id]"
+            class="product-image"
+            [style.background-image]="'url('+p.img+')'"
+          ></div>
 
-<ion-content>
+          <ion-card-content tappable [routerLink]="['/products', p.id]">
+            <ion-label color="dark">
+              <b>{{ p.title}}</b>
+              <p>{{ p.price }}</p>
+            </ion-label>
+          </ion-card-content>
 
+          <ion-button
+            class="ion-no-margin"
+            expand="full"
+            color="primary"
+            (click)="addProduct(p)"
+          >
+            <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
+          </ion-button>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    class="ion-hide-md-up"
+  >
+    <ion-fab-button (click)="openFilter()">
+      <ion-icon name="filter"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

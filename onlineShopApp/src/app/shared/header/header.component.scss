@@ -45,3 +45,12 @@
     --ion-item-color: var(--ion-color-primary);
   }
 }
+
+ion-button > ion-badge {
+  position: absolute;
+  bottom: 0;
+  right: -5px;
+  border-radius: 50%;
+  --background: var(--ion-color-medium);
+}
+
