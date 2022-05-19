@@ -1,79 +1,84 @@
+
 <ion-content>
-  <ion-grid fixed>
-<!--    Breadcrumbs-->
-    <ion-breadcrumbs>
-      <ion-breadcrumb routerLink="/products" routerDirection="back">
-        Products
-        <span slot="separator">
-          <ion-icon name="chevron-forward"></ion-icon>
-        </span>
-      </ion-breadcrumb>
+  <div *ngIf="isProductInformationLoaded">
+    <ion-grid fixed>
+      <!--    Breadcrumbs-->
+      <ion-breadcrumbs>
+        <ion-breadcrumb routerLink="/products" routerDirection="back">
+          Products
+          <span slot="separator">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </span>
+        </ion-breadcrumb>
 
-      <ion-breadcrumb
-        routerLink="/products"
-        routerDirection="back"
-        [queryParams]="{ category: category?.slug }"
-      >
-        {{ category?.title }}
-        <span slot="separator">
-          <ion-icon name="chevron-forward"></ion-icon>
-        </span>
-      </ion-breadcrumb>
+        <ion-breadcrumb
+          routerLink="/products"
+          routerDirection="back"
+          [queryParams]="{ category: category?.slug }"
+        >
+          {{ category?.title }}
+          <span slot="separator">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </span>
+        </ion-breadcrumb>
 
-      <ion-breadcrumb>
-        {{ product.title }}
-      </ion-breadcrumb>
+        <ion-breadcrumb>
+          {{ product.title }}
+        </ion-breadcrumb>
 
-    </ion-breadcrumbs>
+      </ion-breadcrumbs>
 
-    <ion-row>
-<!--      Product image-->
-      <ion-col size="12" size-lg="7">
-        <ion-row>
-          <img [src]="product.img" />
-        </ion-row>
+      <ion-row>
+        <!--      Product image-->
+        <ion-col size="12" size-lg="7">
+          <ion-row>
+            <img [src]="product.imageUrl" />
+          </ion-row>
 
-        <ion-button *ngIf="isAdminLoggedIn" expand="full" (click)="editImage()">
-          Edit image
-          <ion-icon slot="end" name="camera"></ion-icon>
-        </ion-button>
-      </ion-col>
+          <ion-button *ngIf="isAdminLoggedIn" expand="full" (click)="editImage()">
+            Edit image
+            <ion-icon slot="end" name="camera"></ion-icon>
+          </ion-button>
+        </ion-col>
 
-<!--      Product details-->
-      <ion-col size="12" size-lg="5">
-        <ion-card class="add-card ion-text-center">
-<!--          Price header-->
-          <ion-card-header>
-            <ion-card-title
-            >{{ product.price }}</ion-card-title
-            >
-          </ion-card-header>
+        <!--      Product details-->
+        <ion-col size="12" size-lg="5">
+          <ion-card class="add-card ion-text-center">
+            <!--          Price header-->
+            <ion-card-header>
+              <ion-card-title
+              >{{ product.price }}</ion-card-title
+              >
+            </ion-card-header>
 
-<!--          Content-->
-          <ion-card-content>
-            <ion-text color="medium">{{ product.desc }}</ion-text>
+            <!--          Content-->
+            <ion-card-content>
+              <ion-text color="medium">{{ product.description }}</ion-text>
 
-            <ion-button expand="full" (click)="addToCart()">
-              Add to cart
-              <ion-icon slot="end" name="add"></ion-icon>
-            </ion-button>
-
-<!--            Admin buttons-->
-            <ng-container *ngIf="isAdminLoggedIn">
-              <ion-button expand="full" (click)="edit()">
-                Edit
-                <ion-icon slot="end" name="open"></ion-icon>
+              <ion-button expand="full" (click)="addToCart()">
+                Add to cart
+                <ion-icon slot="end" name="add"></ion-icon>
               </ion-button>
-              <ion-button color="danger" expand="full" (click)="delete()">
-                Delete
-                <ion-icon slot="end" name="nuclear"></ion-icon>
-              </ion-button>
-            </ng-container>
 
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+              <!--            Admin buttons-->
+              <ng-container *ngIf="isAdminLoggedIn">
+                <ion-button expand="full" (click)="edit()">
+                  Edit
+                  <ion-icon slot="end" name="open"></ion-icon>
+                </ion-button>
+                <ion-button color="danger" expand="full" (click)="delete()">
+                  Delete
+                  <ion-icon slot="end" name="nuclear"></ion-icon>
+                </ion-button>
+              </ng-container>
 
-  </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </div>
 </ion-content>
+
+

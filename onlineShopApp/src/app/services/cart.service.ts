@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {ProductModel} from '../shared/model/product.model';
+import {ProductDTO} from './model/product-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class CartService {
 
   constructor() { }
 
-  addProduct(product: ProductModel) {
+  addProduct(product: ProductDTO) {
     if(!this.cart[product.id]) {
       this.cart[product.id] = {
         amount: 1,

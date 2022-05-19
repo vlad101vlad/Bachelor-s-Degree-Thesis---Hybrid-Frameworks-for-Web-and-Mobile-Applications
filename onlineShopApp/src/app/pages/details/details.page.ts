@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import productData from '../../../assets/company/menu.json';
-import categoryData from '../../../assets/company/categories.json';
 import { CartService } from '../../services/cart.service';
 import {AuthenticationService} from '../../services/authentication.service';
+import {ProductService} from '../../services/product.service';
+import {ProductDTO} from '../../services/model/product-dto';
 
 @Component({
   selector: 'app-details',
@@ -11,19 +11,20 @@ import {AuthenticationService} from '../../services/authentication.service';
   styleUrls: ['./details.page.scss'],
 })
 export class DetailsPage implements OnInit {
-  product = null;
+  product: ProductDTO = null;
   category = null;
   isAdminLoggedIn: boolean;
-
+  isProductInformationLoaded: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private cartService: CartService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
-    this.loadDummyData();
+    this.subscribeToProductDocument();
     this.subscribeToLoginStatus();
   }
 
@@ -32,14 +33,24 @@ export class DetailsPage implements OnInit {
       .subscribe(authenticationStatus => this.isAdminLoggedIn = authenticationStatus);
   }
 
-  loadDummyData() {
+  subscribeToProductDocument() {
     const id = this.route.snapshot.paramMap.get('id');
+    this.productService.getProductById(id).subscribe(productResponse => {
+      this.product = productResponse;
+      console.log('API CALL: Product data loaded', this.product);
 
-    this.product = productData.filter((p) => p.id === id)[0];
-    this.category = categoryData.filter(
-      (c) => c.id === this.product.category
-    )[0];
+      this.isProductInformationLoaded = true;
+    });
   }
+
+  // loadDummyData() {
+  //   const id = this.route.snapshot.paramMap.get('id');
+  //
+  //   this.product = productData.filter((p) => p.id === id)[0];
+  //   this.category = categoryData.filter(
+  //     (c) => c.id === this.product.category
+  //   )[0];
+  // }
 
   addToCart() {
     this.cartService.addProduct(this.product);

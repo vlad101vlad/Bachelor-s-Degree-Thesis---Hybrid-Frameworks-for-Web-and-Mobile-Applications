@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "shopapplicenta2022": {
+      "hosting": {
+        "app": [
+          "shopapplicenta2022"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "shopapplicenta2022"
+  }
+}
