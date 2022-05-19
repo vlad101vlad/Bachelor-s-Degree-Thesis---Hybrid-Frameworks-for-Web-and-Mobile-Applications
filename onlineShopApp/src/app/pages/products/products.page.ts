@@ -8,6 +8,7 @@ import {FilterModalPage} from '../filter-modal/filter-modal.page';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ProductService} from '../../services/product.service';
 import {ProductDTO} from '../../services/model/product-dto';
+import {CategoryEnum} from '../../services/model/category.enum';
 
 @Component({
   selector: 'app-products',
@@ -17,7 +18,7 @@ import {ProductDTO} from '../../services/model/product-dto';
 export class ProductsPage implements OnInit {
   adminAddProductImage = '../../../assets/company/imgs/add-product.png';
   products: ProductDTO[] = [];
-  firebaseProducts = [];
+  displayProducts: ProductDTO[] = [];
   isAdminLoggedIn: boolean;
 
   constructor(private route: ActivatedRoute,
@@ -27,11 +28,12 @@ export class ProductsPage implements OnInit {
               private modalController: ModalController) { }
 
   ngOnInit() {
-    // this.route.queryParams.subscribe((params) => {
-    //   this.filterProducts(params.category);
-    // });
     this.subscribeToLoginStatus();
     this.subscribeToFirestoreProducts();
+
+    this.route.queryParams.subscribe((params) => {
+      this.filterProducts(params.category);
+    });
   }
 
   subscribeToLoginStatus() {
@@ -42,39 +44,45 @@ export class ProductsPage implements OnInit {
   subscribeToFirestoreProducts() {
     this.productsService.getProducts().subscribe(products => {
       this.products = products;
+      this.displayProducts = this.products;
     });
   }
 
-  // filterProducts(category = null) {
-  //   if (!category) {
-  //     this.products = productData;
-  //   } else {
-  //     const cat = categoryData.filter((item) => item.slug === category)[0];
-  //     this.products = productData.filter((p) => p.category === cat.id);
-  //   }
-  // }
+  filterProducts(category = null) {
+    if (category) {
+      this.displayProducts = this.products
+        .filter((product) => this.categoryMapper(product.category) === category);
+    } else {
+      this.displayProducts = this.products;
+    }
+  }
 
   addProduct(product) {
     this.cartService.addProduct(product);
   }
 
-  // async openFilter() {
-  //   const modal = await this.modalController.create({
-  //     component: FilterModalPage,
-  //     breakpoints: [0, 0.5],
-  //     initialBreakpoint: 0.5,
-  //     handle: false,
-  //     componentProps: {
-  //       categories: categoryData
-  //     }
-  //   });
-  //
-  //   await modal.present();
-  //
-  //   const { data } = await modal.onWillDismiss();
-  //
-  //   if (data) {
-  //     this.filterProducts(data.category?.slug);
-  //   }
-  // }
+  async openFilter() {
+    const modal = await this.modalController.create({
+      component: FilterModalPage,
+      breakpoints: [0, 0.5],
+      initialBreakpoint: 0.5,
+      handle: false,
+      componentProps: {
+        categories: categoryData
+      }
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss();
+
+    if (data) {
+      this.filterProducts(this.categoryMapper(data.category));
+    }
+  }
+
+  private categoryMapper(productCategory: string): string {
+    productCategory.replace(/\s/g, '-');
+    return productCategory.toLowerCase();
+  }
 }

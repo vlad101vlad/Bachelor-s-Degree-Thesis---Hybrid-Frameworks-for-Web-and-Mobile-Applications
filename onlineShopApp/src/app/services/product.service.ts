@@ -21,4 +21,8 @@ export class ProductService {
     const productDocumentReference = doc(this.firestore, 'products', id);
     return docData(productDocumentReference, {idField: 'id'}) as Observable<ProductDTO>;
   }
+
+  // getCategoryEnumFromValue(categoryString: string): CategoryEnum {
+  //   return categoryString as CategoryEnum;
+  // }
 }

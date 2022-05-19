@@ -14,9 +14,8 @@
         <ion-breadcrumb
           routerLink="/products"
           routerDirection="back"
-          [queryParams]="{ category: category?.slug }"
         >
-          {{ category?.title }}
+          {{ product.category }}
           <span slot="separator">
         <ion-icon name="chevron-forward"></ion-icon>
       </span>

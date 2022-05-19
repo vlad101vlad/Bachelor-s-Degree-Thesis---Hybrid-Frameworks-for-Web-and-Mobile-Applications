@@ -4,6 +4,7 @@ import {AnimationController, ModalController} from '@ionic/angular';
 import {CartService} from '../../services/cart.service';
 import {CartModalPage} from '../../pages/cart-modal/cart-modal.page';
 import {AuthenticationService} from '../../services/authentication.service';
+import {CategoryEnum} from '../../services/model/category.enum';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit {
 
   @Input() title: string;
   dropdown: boolean;
-  categories = categoriesData;
+  categories = [];
   cartCount = 0;
 
   isAdminLoggedIn: boolean;
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.subscribeToCartItemCount();
     this.subscribeToLoginStatus();
+    this.categories = this.getCategories();
   }
 
   subscribeToLoginStatus() {
@@ -47,6 +49,10 @@ export class HeaderComponent implements OnInit {
       }
       this.cartCount = value;
     }));
+  }
+
+  getCategories(): CategoryEnum[] {
+    return Object.values(CategoryEnum);
   }
 
   hideDropdown(event) {
@@ -90,6 +96,11 @@ export class HeaderComponent implements OnInit {
     });
 
     await modal.present();
+  }
+
+  categoryMapper(productCategory: string): string {
+    productCategory.replace(/\s/g, '-');
+    return productCategory.toLowerCase();
   }
 
   logoutAdmin() {

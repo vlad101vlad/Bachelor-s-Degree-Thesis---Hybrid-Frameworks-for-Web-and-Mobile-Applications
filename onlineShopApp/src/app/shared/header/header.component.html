@@ -78,11 +78,11 @@
         *ngFor="let category of categories"
         (click)="dropdown = false"
         routerLink="/products"
-        [queryParams]="{ category: category.slug }"
+        [queryParams]="{ category: categoryMapper(category) }"
         lines="none"
         routerDirection="root"
       >
-        {{category.title}}
+        {{category}}
       </ion-item>
     </div>
 
