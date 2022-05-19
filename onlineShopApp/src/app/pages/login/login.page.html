@@ -1,0 +1,45 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light" text="">
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <img src="./assets/company/imgs/logo.svg" class="logo" />
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" color="light">Help</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true" scrollY="false">
+  <div class="login">
+    <ion-item lines="none">
+      <ion-input
+        [(ngModel)]="email"
+        placeholder="Please enter your email"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-input
+        [(ngModel)]="password"
+        [type]="showPassword ? 'text' : 'password'"
+        placeholder="Password"
+      ></ion-input>
+      <p class="pw-toggle" slot="end" (click)="showPassword = !showPassword">
+        {{ showPassword ? 'HIDE' : 'SHOW' }}
+      </p>
+    </ion-item>
+
+    <ion-button
+      expand="block"
+      class="login-btn"
+      [class.login-valid]="email != '' && password != ''"
+      routerLink="/tabs"
+      routerDirection="root"
+    >Sign In</ion-button>
+
+  </div>
+</ion-content>

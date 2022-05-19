@@ -15,6 +15,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/cart-modal/cart-modal.module').then( m => m.CartModalPageModule)
   },
   {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
     path: '404',
     loadChildren: () =>
       import('./pages/error/error.module').then((m) => m.ErrorPageModule),

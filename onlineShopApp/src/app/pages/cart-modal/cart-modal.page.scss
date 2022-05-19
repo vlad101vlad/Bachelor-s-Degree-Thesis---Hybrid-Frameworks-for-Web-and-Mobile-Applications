@@ -5,3 +5,10 @@ ion-footer ion-toolbar:last-of-type {
 ion-footer ion-toolbar {
   padding-bottom: 0;
 }
+
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
