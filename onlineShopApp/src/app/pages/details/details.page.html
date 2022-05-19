@@ -1,5 +1,6 @@
 <ion-content>
   <ion-grid fixed>
+<!--    Breadcrumbs-->
     <ion-breadcrumbs>
       <ion-breadcrumb routerLink="/products" routerDirection="back">
         Products
@@ -26,22 +27,49 @@
     </ion-breadcrumbs>
 
     <ion-row>
+<!--      Product image-->
       <ion-col size="12" size-lg="7">
-        <img [src]="product.img" />
+        <ion-row>
+          <img [src]="product.img" />
+        </ion-row>
+
+        <ion-button *ngIf="isAdminLoggedIn" expand="full" (click)="editImage()">
+          Edit image
+          <ion-icon slot="end" name="camera"></ion-icon>
+        </ion-button>
       </ion-col>
+
+<!--      Product details-->
       <ion-col size="12" size-lg="5">
         <ion-card class="add-card ion-text-center">
+<!--          Price header-->
           <ion-card-header>
             <ion-card-title
             >{{ product.price }}</ion-card-title
             >
           </ion-card-header>
+
+<!--          Content-->
           <ion-card-content>
             <ion-text color="medium">{{ product.desc }}</ion-text>
+
             <ion-button expand="full" (click)="addToCart()">
               Add to cart
               <ion-icon slot="end" name="add"></ion-icon>
             </ion-button>
+
+<!--            Admin buttons-->
+            <ng-container *ngIf="isAdminLoggedIn">
+              <ion-button expand="full" (click)="edit()">
+                Edit
+                <ion-icon slot="end" name="open"></ion-icon>
+              </ion-button>
+              <ion-button color="danger" expand="full" (click)="delete()">
+                Delete
+                <ion-icon slot="end" name="nuclear"></ion-icon>
+              </ion-button>
+            </ng-container>
+
           </ion-card-content>
         </ion-card>
       </ion-col>
