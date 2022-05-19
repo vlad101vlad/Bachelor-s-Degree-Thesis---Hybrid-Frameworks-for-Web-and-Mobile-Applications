@@ -1,9 +1,51 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>details</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+  <ion-grid fixed>
+    <ion-breadcrumbs>
+      <ion-breadcrumb routerLink="/products" routerDirection="back">
+        Products
+        <span slot="separator">
+          <ion-icon name="chevron-forward"></ion-icon>
+        </span>
+      </ion-breadcrumb>
 
+      <ion-breadcrumb
+        routerLink="/products"
+        routerDirection="back"
+        [queryParams]="{ category: category?.slug }"
+      >
+        {{ category?.title }}
+        <span slot="separator">
+          <ion-icon name="chevron-forward"></ion-icon>
+        </span>
+      </ion-breadcrumb>
+
+      <ion-breadcrumb>
+        {{ product.title }}
+      </ion-breadcrumb>
+
+    </ion-breadcrumbs>
+
+    <ion-row>
+      <ion-col size="12" size-lg="7">
+        <img [src]="product.img" />
+      </ion-col>
+      <ion-col size="12" size-lg="5">
+        <ion-card class="add-card ion-text-center">
+          <ion-card-header>
+            <ion-card-title
+            >{{ product.price }}</ion-card-title
+            >
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text color="medium">{{ product.desc }}</ion-text>
+            <ion-button expand="full" (click)="addToCart()">
+              Add to cart
+              <ion-icon slot="end" name="add"></ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
 </ion-content>

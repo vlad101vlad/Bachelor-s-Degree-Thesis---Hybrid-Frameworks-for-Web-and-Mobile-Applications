@@ -1,0 +1,34 @@
+<ion-content class="ion-padding">
+  <ion-list *ngIf="cart.length > 0">
+    <ion-item *ngFor="let item of cart" lines="none">
+      <ion-text slot="start" color="primary"> {{ item.amount }}x
+      </ion-text>
+      <ion-label color="dark"> {{ item.title }} </ion-label>
+      <ion-text slot="end" color="dark">
+        {{ item.price }}
+      </ion-text>
+    </ion-item>
+  </ion-list>
+  <ion-text *ngIf="cart.length == 0" class="ion-text-center">
+    <h2>Your cart is currently empty</h2>
+  </ion-text>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar
+    [color]="cart.length > 0 ? 'primary' : 'medium'"
+    class="ion-text-center"
+  >
+    <ion-button
+      fill="clear"
+      color="light"
+      *ngIf="cart.length == 0"
+      (click)="dismiss()"
+    >
+      <h3>Shop now</h3>
+    </ion-button>
+    <ion-text *ngIf="cart.length > 0">
+      <h3>Total: {{ cartSum }}</h3>
+    </ion-text>
+  </ion-toolbar>
+</ion-footer>

@@ -17,6 +17,7 @@ ion-accordion ion-list[slot="content"] {
 @media (min-width: 768px) {
   ion-router-outlet {
     margin-top: 54px;
+    height: calc(100vh - 54px - 50px);
   }
 }
 @media (max-width: 768px) {
@@ -24,3 +25,4 @@ ion-accordion ion-list[slot="content"] {
     margin-top: calc(var(--ion-safe-area-top) + var(--header-height));
   }
 }
+

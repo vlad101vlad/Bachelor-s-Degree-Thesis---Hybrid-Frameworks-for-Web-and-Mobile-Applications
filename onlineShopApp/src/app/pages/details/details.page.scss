@@ -1,0 +1,10 @@
+.add-card {
+  ion-card-header {
+    background: var(--ion-color-light);
+  }
+  ion-card-content {
+    padding-top: 20px;
+  }
+  box-shadow: none;
+  border: 1px solid var(--ion-color-medium);
+}

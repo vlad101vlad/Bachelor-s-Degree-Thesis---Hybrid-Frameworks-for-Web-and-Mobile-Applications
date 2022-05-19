@@ -1,0 +1,7 @@
+ion-footer ion-toolbar:last-of-type {
+  padding-bottom: var(--ion-safe-area-bottom, 0);
+}
+
+ion-footer ion-toolbar {
+  padding-bottom: 0;
+}

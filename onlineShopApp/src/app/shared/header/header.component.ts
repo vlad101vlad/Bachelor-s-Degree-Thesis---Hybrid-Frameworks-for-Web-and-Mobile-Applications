@@ -1,7 +1,8 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import categoriesData from '../../../assets/company/categories.json';
-import {AnimationController} from '@ionic/angular';
+import {AnimationController, ModalController} from '@ionic/angular';
 import {CartService} from '../../services/cart.service';
+import {CartModalPage} from "../../pages/cart-modal/cart-modal.page";
 
 
 @Component({
@@ -21,7 +22,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private animationController: AnimationController,
-    private cartService: CartService
+    private cartService: CartService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -66,5 +68,14 @@ export class HeaderComponent implements OnInit {
       .duration(600)
       .keyframes(keyframes);
     cartAnimationMobile.play();
+  }
+
+  async openCart() {
+    const modal = await this.modalController.create({
+      component: CartModalPage,
+      cssClass: 'custom-modal'
+    });
+
+    await modal.present();
   }
 }
