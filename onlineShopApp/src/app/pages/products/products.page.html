@@ -4,8 +4,30 @@
   </ion-text>
   <ion-grid fixed>
     <ion-row class="ion-justify-content-center">
+      <!--        Add new product admin button-->
+      <ng-container *ngIf="isAdminLoggedIn">
+        <ion-col size="12" size-sm="6" size-md="4">
+          <ion-card>
+            <div
+              tappable
+              class="product-image"
+              [style.background-image]="'url('+ adminAddProductImage +')'"
+            ></div>
+
+            <ion-card-content>
+              <ion-label color="dark">
+                <b>Add new product</b>
+                <p>               </p>
+              </ion-label>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ng-container>
+
       <ion-col size="12" size-sm="6" size-md="4" *ngFor="let p of products">
+<!--        Product card-->
         <ion-card>
+<!--          Card image-->
           <div
             tappable
             [routerLink]="['/products', p.id]"
@@ -13,6 +35,7 @@
             [style.background-image]="'url('+p.img+')'"
           ></div>
 
+<!--          Product card description-->
           <ion-card-content tappable [routerLink]="['/products', p.id]">
             <ion-label color="dark">
               <b>{{ p.title}}</b>
@@ -20,6 +43,7 @@
             </ion-label>
           </ion-card-content>
 
+<!--          Add product to cart button-->
           <ion-button
             class="ion-no-margin"
             expand="full"
