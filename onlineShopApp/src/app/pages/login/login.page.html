@@ -1,15 +1,19 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
+
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light" text="">
       </ion-back-button>
     </ion-buttons>
+
     <ion-title>
       <img src="./assets/company/imgs/logo.svg" class="logo" />
     </ion-title>
+
     <ion-buttons slot="end">
       <ion-button fill="clear" color="light">Help</ion-button>
     </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -37,9 +41,13 @@
       expand="block"
       class="login-btn"
       [class.login-valid]="email != '' && password != ''"
-      routerLink="/tabs"
+      routerLink="/"
       routerDirection="root"
+      (click)="loginAdmin()"
     >Sign In</ion-button>
 
   </div>
 </ion-content>
+
+
+

@@ -1,19 +1,40 @@
+<!--Mobile version-->
 <ion-header class="mobile-header">
   <ion-toolbar>
+<!--    Menu hamburger-->
     <ion-buttons slot="start">
       <ion-menu-button menu="myMenu"></ion-menu-button>
     </ion-buttons>
+
     <ion-title>{{ title }}</ion-title>
+
+<!--    Login and cart buttons-->
     <ion-buttons slot="end">
+<!--      Cart button-->
       <ion-button #cartButtonMobile (click)="openCart()">
         <ion-icon slot="icon-only" name="cart"></ion-icon>
         <ion-badge>{{cartCount}}</ion-badge>
       </ion-button>
+
+<!--      Login/logout container-->
+      <ng-container *ngIf="!isAdminLoggedIn; else logoutButton">
+<!--        Login button-->
+        <ion-button
+          fill="clear"
+          color="dark"
+          routerLink="/login"
+          routerDirection="root"
+          routerLinkActive="active-item"
+        >
+          Login
+        </ion-button>
+      </ng-container>
     </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-
+<!--Web version-->
 <ion-row>
   <!--  Logo-->
   <ion-col size="2" class="ion-align-items-center">
@@ -21,7 +42,7 @@
   </ion-col>
 
   <!--  Navigation-->
-  <ion-col size="7" class="ion-text-left">
+  <ion-col size="6" class="ion-text-left">
     <!--  Home-->
     <ion-button
       fill="clear"
@@ -76,11 +97,39 @@
     </ion-button>
   </ion-col>
 
-  <!--  Cart icon-->
-  <ion-col size="3" class="ion-text-right">
+
+  <!--  Cart and login icon-->
+  <ion-col size="4" class="ion-text-right">
+<!--    Cart button-->
     <ion-button fill="clear" color="dark" #cartButtonWeb (click)="openCart()">
       <ion-icon slot="icon-only" name="cart"></ion-icon>
       <ion-badge>{{cartCount}}</ion-badge>
     </ion-button>
+
+<!--    Login button-->
+    <ng-container *ngIf="!isAdminLoggedIn; else logoutButton">
+      <ion-button
+        fill="clear"
+        color="dark"
+        routerLink="/login"
+        routerDirection="root"
+        routerLinkActive="active-item"
+      >
+        Login
+      </ion-button>
+    </ng-container>
   </ion-col>
 </ion-row>
+
+<!--Logout template-->
+<ng-template #logoutButton>
+  <ion-button
+    fill="clear"
+    color="dark"
+    routerLink="/"
+    routerDirection="root"
+    (click)="logoutAdmin()"
+  >
+    Logout
+  </ion-button>
+</ng-template>

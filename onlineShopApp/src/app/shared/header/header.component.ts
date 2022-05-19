@@ -2,7 +2,8 @@ import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import categoriesData from '../../../assets/company/categories.json';
 import {AnimationController, ModalController} from '@ionic/angular';
 import {CartService} from '../../services/cart.service';
-import {CartModalPage} from "../../pages/cart-modal/cart-modal.page";
+import {CartModalPage} from '../../pages/cart-modal/cart-modal.page';
+import {AuthenticationService} from '../../services/authentication.service';
 
 
 @Component({
@@ -20,13 +21,26 @@ export class HeaderComponent implements OnInit {
   categories = categoriesData;
   cartCount = 0;
 
+  isAdminLoggedIn: boolean;
+
   constructor(
     private animationController: AnimationController,
     private cartService: CartService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private authenticationService: AuthenticationService
   ) { }
 
   ngOnInit() {
+    this.subscribeToCartItemCount();
+    this.subscribeToLoginStatus();
+  }
+
+  subscribeToLoginStatus() {
+    this.authenticationService.getLoginStatus()
+      .subscribe(authenticationStatus => this.isAdminLoggedIn = authenticationStatus);
+  }
+
+  subscribeToCartItemCount() {
     this.cartService.getCartCount().subscribe((value => {
       if (value > 0) {
         this.animateCart();
@@ -47,7 +61,6 @@ export class HeaderComponent implements OnInit {
     }
 
   }
-
 
   animateCart() {
     const keyframes = [
@@ -77,5 +90,9 @@ export class HeaderComponent implements OnInit {
     });
 
     await modal.present();
+  }
+
+  logoutAdmin() {
+    this.authenticationService.logout();
   }
 }
