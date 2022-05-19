@@ -8,7 +8,6 @@ import {ModalController} from '@ionic/angular';
   styleUrls: ['./cart-modal.page.scss'],
 })
 export class CartModalPage implements OnInit {
-  cart = [];
   cartItems = [];
   cartSum = 0;
   tip = 0;
@@ -21,8 +20,7 @@ export class CartModalPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.cartItems = this.cartService.getCart();
-    this.cartSum = this.cartItems.reduce((value, item) => (value += item.amount * item.price), 0);
+    this.refreshCart();
   }
 
   dismiss() {
@@ -40,11 +38,20 @@ export class CartModalPage implements OnInit {
   }
 
   remove(itemToBeRemoved) {
-    this.cart = this.cart.filter(item => item.id !== itemToBeRemoved.id);
-    this.cartSum = this.cart.reduce((value, item) => value += item.price, 0);
+    this.cartService.removeProduct(itemToBeRemoved);
+    this.refreshCart();
   }
 
   feeInfo($event: any) {
 
+  }
+
+  private computeCartSum(){
+    this.cartSum = this.cartItems.reduce((value, item) => (value += item.amount * item.price), 0);
+  }
+
+  private refreshCart() {
+    this.cartItems = this.cartService.getCart();
+    this.computeCartSum();
   }
 }

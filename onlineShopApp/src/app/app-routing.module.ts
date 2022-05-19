@@ -19,6 +19,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
+    path: 'checkout',
+    loadChildren: () => import('./pages/checkout/checkout.module').then( m => m.CheckoutPageModule)
+  },
+  {
     path: '404',
     loadChildren: () =>
       import('./pages/error/error.module').then((m) => m.ErrorPageModule),

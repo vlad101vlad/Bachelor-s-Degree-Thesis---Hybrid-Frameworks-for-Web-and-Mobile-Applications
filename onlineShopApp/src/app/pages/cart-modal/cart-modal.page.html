@@ -1,3 +1,11 @@
+<!--Cart header-->
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-title>Cart</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!--List of ordered items-->
 <ion-content class="ion-padding">
   <div class="order">
     <ion-item-sliding *ngFor="let item of cartItems">
@@ -15,6 +23,7 @@
       </ion-item-options>
     </ion-item-sliding>
 
+<!--    Delivery fee-->
   <ion-item lines="none">
     <ion-label> Delivery fee </ion-label>
     <ion-text slot="end" color="medium">
@@ -28,6 +37,7 @@
     </ion-text>
   </ion-item>
 
+<!--    Service fee-->
   <ion-item lines="none">
     <ion-label>Service fee</ion-label>
     <ion-text slot="end" color="medium">
@@ -43,8 +53,7 @@
 
 </ion-content>
 
-
-
+<!--Footer-->
 <ion-footer>
   <ion-toolbar
     [color]="cartItems.length > 0 ? 'primary' : 'medium'"
@@ -93,9 +102,10 @@
         routerLink="/checkout"
         [state]="{sum: cartSum + tip + deliveryFee + serviceFee}"
         color="secondary"
+        (click)="dismiss()"
       >
-        Go to Checkout</ion-button
-      >
+        Go to Checkout
+      </ion-button>
     </ng-container>
 
 <!--    No selected items-->

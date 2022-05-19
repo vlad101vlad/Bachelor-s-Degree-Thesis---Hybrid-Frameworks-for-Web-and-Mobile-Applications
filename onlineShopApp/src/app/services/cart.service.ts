@@ -7,7 +7,7 @@ import {ProductModel} from '../shared/model/product.model';
 })
 export class CartService {
   private cart = {};
-  private cartItems = new BehaviorSubject(0);
+  private cartItemCount = new BehaviorSubject(0);
 
   constructor() { }
 
@@ -21,11 +21,18 @@ export class CartService {
       this.cart[product.id].amount += 1;
     }
 
-    this.cartItems.next(this.cartItems.value + 1);
+    this.cartItemCount.next(this.cartItemCount.value + 1);
+  }
+
+  removeProduct(item: any) {
+    delete this.cart[item.id];
+
+    this.cartItemCount.next(this.cartItemCount.value - item.amount);
+    item.amount = 0;
   }
 
   getCartCount() {
-    return this.cartItems.asObservable();
+    return this.cartItemCount.asObservable();
   }
 
   getCart() {
