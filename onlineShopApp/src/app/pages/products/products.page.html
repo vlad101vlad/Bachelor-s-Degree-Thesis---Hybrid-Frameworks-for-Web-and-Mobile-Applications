@@ -5,11 +5,14 @@
   <ion-grid fixed>
     <ion-row class="ion-justify-content-center">
       <!--        Add new product admin button-->
-      <ng-container *ngIf="isAdminLoggedIn">
+      <ng-container *ngIf="!isAdminLoggedIn">
         <ion-col size="12" size-sm="6" size-md="4">
           <ion-card>
             <div
               tappable
+              routerLink="/products/add-product"
+              routerDirection="root"
+              routerLinkActive="active-item"
               class="product-image"
               [style.background-image]="'url('+ adminAddProductImage +')'"
             ></div>

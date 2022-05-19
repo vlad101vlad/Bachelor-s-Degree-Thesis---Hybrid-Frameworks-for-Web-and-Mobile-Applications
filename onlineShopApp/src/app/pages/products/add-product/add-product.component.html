@@ -1,0 +1,44 @@
+<ion-content class="ion-padding">
+  <ion-item lines="none">
+    <ion-icon slot="start" name="text-outline"></ion-icon>
+    <ion-input
+      [(ngModel)]="title"
+      placeholder="Title"
+    ></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-icon slot="start" name="file-tray-full-outline"></ion-icon>
+    <ion-input
+      [(ngModel)]="category"
+      placeholder="Category"
+    ></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-icon slot="start" name="document-text-outline"></ion-icon>
+    <ion-textarea
+      [(ngModel)]="description"
+      placeholder="Description"
+    ></ion-textarea>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-icon slot="start" name="pricetag-outline"></ion-icon>
+    <ion-input
+      [(ngModel)]="price"
+      placeholder="Price"
+    ></ion-input>
+  </ion-item>
+
+
+  <ion-button
+    expand="block"
+    color="primary"
+    strong="true"
+    (click)="save()"
+    class="ion-margin-top"
+  >
+    Confirm
+  </ion-button>
+</ion-content>
