@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ProductDTO} from './model/product-dto';
 import {Storage} from '@capacitor/storage';
 import {CartDto} from './model/cart-dto';
 import {CartProductDto} from './model/cart-product-dto';
+import {ToastController} from '@ionic/angular';
 
 const CART_KEY = 'active-cart';
 
@@ -11,10 +12,10 @@ const CART_KEY = 'active-cart';
   providedIn: 'root'
 })
 export class CartService {
-  private cart = {};
   private cartItemCount = new BehaviorSubject(0);
+  private cartNeedsRefresh = new BehaviorSubject<boolean>(null);
 
-  constructor() {
+  constructor(private toastController: ToastController) {
     const cartDto: CartDto = {
       products: [],
       raiderTip: '0'
@@ -23,10 +24,12 @@ export class CartService {
     Storage.keys().then((response) => {
       const keys = response.keys;
       if (!keys.find(iteratedKey => iteratedKey === CART_KEY)) {
+        // Creating the storage key for the cart if not already created
         Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
       } else {
+        // Setting the number of items already stored
         Storage.get({key: CART_KEY}).then((cartResponse) => {
-            const cart = this.mapCartDtoStringyfiedToCartDTO(cartResponse.value);
+            const cart = CartService.mapCartDtoStringyfiedToCartDTO(cartResponse.value);
             this.cartItemCount.next(this.computeCartNumberOfItems(cart.products));
           }
         );
@@ -34,107 +37,92 @@ export class CartService {
     });
   }
 
-
-  addProduct(product: ProductDTO) {
-    if (!this.cart[product.id]) {
-      this.cart[product.id] = {
-        amount: 1,
-        ...product,
-      };
-    } else {
-      this.cart[product.id].amount += 1;
-    }
-
-    this.cartItemCount.next(this.cartItemCount.value + 1);
+  // JSON mappings
+  static mapCartDtoStringyfiedToCartDTO(cartDtoStringyfied): CartDto {
+    console.log(cartDtoStringyfied);
+    return JSON.parse(cartDtoStringyfied);
   }
 
-  addProductStorage(product: ProductDTO) {
-    Storage.get({key: CART_KEY}).then((response) => {
-        const cartDto = this.mapCartDtoStringyfiedToCartDTO(response.value);
-
-        if (cartDto.products.length === 0) {
-          cartDto.products.push(this.mapProductToCartProduct(product));
-        } else {
-          const existingProduct = this.findProductAlreadyInCart(cartDto.products, product);
-          if (existingProduct) {
-            const newAmount = Number(existingProduct.amount) + 1;
-            existingProduct.amount = newAmount.toString();
-          } else {
-            cartDto.products.push(this.mapProductToCartProduct(product));
-          }
-        }
-
-        Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
-        // this.cartItemCount.next(cartDto.products.length);
-      }
-    );
-  }
-
-  removeProduct(item: any) {
-    delete this.cart[item.id];
-
-    this.cartItemCount.next(this.cartItemCount.value - item.amount);
-    item.amount = 0;
-  }
-
-  removeProductFromStorage(product: ProductDTO) {
-    Storage.get({key: CART_KEY}).then((response) => {
-        const cartDto = this.mapCartDtoStringyfiedToCartDTO(response.value);
-
-        if (cartDto.products.length === 0) {
-          cartDto.products.push(this.mapProductToCartProduct(product));
-        } else {
-          const existingProduct = this.findProductAlreadyInCart(cartDto.products, product);
-          if (existingProduct) {
-            const newAmount = Number(existingProduct.amount) + 1;
-            existingProduct.amount = newAmount.toString();
-          } else {
-            cartDto.products.push(this.mapProductToCartProduct(product));
-          }
-        }
-
-        Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
-      }
-    );
-  }
-
-  getCartCount() {
-    return this.cartItemCount.asObservable();
-  }
-
-  getCart() {
-    const cartItems = [];
-    for (const [key, value] of Object.entries(this.cart)) {
-      cartItems.push(value);
-    }
-
-    return cartItems;
-  }
-
-  async getCartFromStorage() {
-    const {value} = await Storage.get({key: CART_KEY});
-
-    return this.mapCartDtoStringyfiedToCartDTO(value);
-  }
-
-  private findProductAlreadyInCart(products: CartProductDto[], product: ProductDTO): CartProductDto {
-    return products.find(iteratedProduct => iteratedProduct.id === product.id);
-  }
-
-  private mapProductToCartProduct(product: ProductDTO): CartProductDto {
-    const cartProduct: CartProductDto = {
+  private static mapProductNewToCartProduct(product: ProductDTO): CartProductDto {
+    return {
       id: product.id,
       price: JSON.stringify(product.price),
       title: product.title,
       amount: '1'
     };
-    return cartProduct;
   }
 
-  private mapCartDtoStringyfiedToCartDTO(cartDtoStringyfied): CartDto {
-    console.log(cartDtoStringyfied);
-    const cartDto: CartDto = JSON.parse(cartDtoStringyfied);
-    return cartDto;
+  //CRUD operations
+  addProduct(product: ProductDTO): Promise<any> {
+    return Storage.get({key: CART_KEY}).then((response) => {
+      const cartDto = CartService.mapCartDtoStringyfiedToCartDTO(response.value);
+
+      if (cartDto.products.length > 0) {
+        const existingProduct = this.findProductAlreadyInCart(cartDto.products, product);
+        if (existingProduct) {
+          const newAmount = Number(existingProduct.amount) + 1;
+          existingProduct.amount = newAmount.toString();
+
+          return Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
+        }
+      }
+
+      cartDto.products.push(CartService.mapProductNewToCartProduct(product));
+      this.cartItemCount.next(this.computeCartNumberOfItems(cartDto.products));
+      return Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
+    });
+  }
+
+  updateTip(tipAmount: number): Promise<any> {
+    return Storage.get({key: CART_KEY}).then((response) => {
+      const cartDto = CartService.mapCartDtoStringyfiedToCartDTO(response.value);
+
+      const newTip = Number(cartDto.raiderTip) + tipAmount;
+      if (newTip >= 0) {
+        cartDto.raiderTip = newTip.toString();
+      }
+      return Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
+    });
+  }
+
+  removeProduct(toRemoveProduct: ProductDTO): Promise<any> {
+    return Storage.get({key: CART_KEY}).then((response) => {
+      const cartDto = CartService.mapCartDtoStringyfiedToCartDTO(response.value);
+
+      cartDto.products = cartDto.products
+        .filter((cartProduct) => toRemoveProduct.id !== cartProduct.id);
+      return Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
+    });
+  }
+
+  getCart(): Promise<any> {
+    return Storage.get({key: CART_KEY});
+  }
+
+  // Observable controls
+  getCartCount() {
+    return this.cartItemCount.asObservable();
+  }
+
+  getCartRefresh(): Observable<boolean> {
+    return this.cartNeedsRefresh.asObservable();
+  }
+
+  notifyCartNeedsRefresh() {
+    this.cartNeedsRefresh.next(true);
+  }
+
+  async showToast(msg) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  // Util functions for CRUD operations mappings
+  private findProductAlreadyInCart(products: CartProductDto[], product: ProductDTO): CartProductDto {
+    return products.find(iteratedProduct => iteratedProduct.id === product.id);
   }
 
   private computeCartNumberOfItems(products: CartProductDto[]): number {

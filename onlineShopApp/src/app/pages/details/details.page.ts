@@ -46,7 +46,10 @@ export class DetailsPage implements OnInit {
   }
 
   addToCart() {
-    this.cartService.addProduct(this.product);
+    this.cartService.addProduct(this.product).then((addedProduct) => {
+      this.cartService.showToast('Product was added to the cart');
+      this.cartService.notifyCartNeedsRefresh();
+    });
   }
 
   edit() {
