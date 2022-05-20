@@ -17,13 +17,19 @@ export class CartService {
   constructor() {
     const cartDto: CartDto = {
       products: [],
-      raiderTip: ''
+      raiderTip: '0'
     };
 
     Storage.keys().then((response) => {
       const keys = response.keys;
-      if(!keys.find(iteratedKey => iteratedKey === CART_KEY)) {
+      if (!keys.find(iteratedKey => iteratedKey === CART_KEY)) {
         Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
+      } else {
+        Storage.get({key: CART_KEY}).then((cartResponse) => {
+            const cart = this.mapCartDtoStringyfiedToCartDTO(cartResponse.value);
+            this.cartItemCount.next(this.computeCartNumberOfItems(cart.products));
+          }
+        );
       }
     });
   }
@@ -58,7 +64,8 @@ export class CartService {
           }
         }
 
-        Storage.set({key:CART_KEY, value: JSON.stringify(cartDto)});
+        Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
+        // this.cartItemCount.next(cartDto.products.length);
       }
     );
   }
@@ -68,6 +75,27 @@ export class CartService {
 
     this.cartItemCount.next(this.cartItemCount.value - item.amount);
     item.amount = 0;
+  }
+
+  removeProductFromStorage(product: ProductDTO) {
+    Storage.get({key: CART_KEY}).then((response) => {
+        const cartDto = this.mapCartDtoStringyfiedToCartDTO(response.value);
+
+        if (cartDto.products.length === 0) {
+          cartDto.products.push(this.mapProductToCartProduct(product));
+        } else {
+          const existingProduct = this.findProductAlreadyInCart(cartDto.products, product);
+          if (existingProduct) {
+            const newAmount = Number(existingProduct.amount) + 1;
+            existingProduct.amount = newAmount.toString();
+          } else {
+            cartDto.products.push(this.mapProductToCartProduct(product));
+          }
+        }
+
+        Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
+      }
+    );
   }
 
   getCartCount() {
@@ -81,6 +109,12 @@ export class CartService {
     }
 
     return cartItems;
+  }
+
+  async getCartFromStorage() {
+    const {value} = await Storage.get({key: CART_KEY});
+
+    return this.mapCartDtoStringyfiedToCartDTO(value);
   }
 
   private findProductAlreadyInCart(products: CartProductDto[], product: ProductDTO): CartProductDto {
@@ -101,5 +135,12 @@ export class CartService {
     console.log(cartDtoStringyfied);
     const cartDto: CartDto = JSON.parse(cartDtoStringyfied);
     return cartDto;
+  }
+
+  private computeCartNumberOfItems(products: CartProductDto[]): number {
+    let sum = 0;
+    products.forEach(product => sum += Number(product.amount));
+
+    return sum;
   }
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CartService} from '../../services/cart.service';
 import {ModalController} from '@ionic/angular';
+import {CartDto} from '../../services/model/cart-dto';
 
 @Component({
   selector: 'app-cart-modal',
@@ -9,15 +10,18 @@ import {ModalController} from '@ionic/angular';
 })
 export class CartModalPage implements OnInit {
   cartItems = [];
+  cart: CartDto = null;
   cartSum = 0;
-  tip = 0;
   deliveryFee = 2.5;
   serviceFee = 0.65;
+
+  cartProductsLoaded: boolean;
 
   constructor(
     private cartService: CartService,
     private modalController: ModalController
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.refreshCart();
@@ -28,13 +32,13 @@ export class CartModalPage implements OnInit {
   }
 
   removeTip() {
-    if(this.tip > 0) {
-      this.tip -= 0.5;
-    }
+    // if(this.tip > 0) {
+    //   this.tip -= 0.5;
+    // }
   }
 
   addTip() {
-    this.tip += 0.5;
+    // this.tip += 0.5;
   }
 
   remove(itemToBeRemoved) {
@@ -46,12 +50,20 @@ export class CartModalPage implements OnInit {
 
   }
 
-  private computeCartSum(){
-    this.cartSum = this.cartItems.reduce((value, item) => (value += item.amount * item.price), 0);
+  private computeCartSum() {
+    this.cart.products.forEach(product => {
+      this.cartSum += Number(product.amount) * Number(product.price);
+    });
+    this.cartSum += Number(this.cart.raiderTip) + this.serviceFee + this.deliveryFee;
   }
 
-  private refreshCart() {
-    this.cartItems = this.cartService.getCart();
-    this.computeCartSum();
+  private async refreshCart() {
+    this.cartService.getCartFromStorage().then((cartFromStorage => {
+      this.cart = cartFromStorage;
+      this.cartItems = this.cartService.getCart();
+      this.computeCartSum();
+
+      this.cartProductsLoaded = true;
+    }));
   }
 }
