@@ -13,7 +13,7 @@ import {provideDatabase, getDatabase} from '@angular/fire/database';
 import {provideFirestore, getFirestore} from '@angular/fire/firestore';
 import {provideRemoteConfig, getRemoteConfig} from '@angular/fire/remote-config';
 import {provideStorage, getStorage} from '@angular/fire/storage';
-import {FIREBASE_OPTIONS} from "@angular/fire/compat";
+import {FIREBASE_OPTIONS} from '@angular/fire/compat';
 
 @NgModule({
   declarations: [AppComponent],
