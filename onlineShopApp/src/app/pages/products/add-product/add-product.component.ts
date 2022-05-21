@@ -2,10 +2,13 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActionSheetController, Platform} from '@ionic/angular';
 import {Camera, CameraResultType, CameraSource} from '@capacitor/camera';
 import {Firestore} from '@angular/fire/firestore';
-import {Storage} from '@angular/fire/storage';
 import {DomSanitizer} from '@angular/platform-browser';
 import {BehaviorSubject} from 'rxjs';
+import {AngularFireStorage} from "@angular/fire/compat/storage";
+import {AngularFireDatabase} from "@angular/fire/compat/database";
+import {finalize} from "rxjs/operators";
 
+const FIRESTORE_BASE_PATH = '/images';
 
 @Component({
   selector: 'app-add-product',
@@ -30,8 +33,8 @@ export class AddProductComponent implements OnInit {
     private platform: Platform,
     private actionSheetController: ActionSheetController,
     private sanitizer: DomSanitizer,
-    private firestore: Firestore,
-    private firebaseStorage: Storage
+    private firestore: AngularFireDatabase,
+    private firebaseStorage: AngularFireStorage
   ) {
     this.subscribeToImageSourceChanged();
   }
@@ -99,10 +102,25 @@ export class AddProductComponent implements OnInit {
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos
     });
-    debugger;
-    if(image) {
+    if (image) {
       this.imageSourceWasChanged.next(this.b64toSrcFormat(image.base64String, image.format));
+      const file = this.convertBase64ToImageFile(image.base64String, 'new photo', image.format);
+      console.log(file);
+      this.uploadImageToFirebase(file);
     }
+  }
+
+  uploadImageToFirebase(file: File) {
+    const storageReference = this.firebaseStorage.ref(FIRESTORE_BASE_PATH);
+    const uploadTask = this.firebaseStorage.upload(FIRESTORE_BASE_PATH + file.name, file);
+
+    uploadTask.snapshotChanges().pipe(
+      finalize(() => {
+        storageReference.getDownloadURL().subscribe(downloadUrl => {
+          console.log(downloadUrl);
+        });
+      })
+    ).subscribe();
   }
 
   private addImage(cameraSource: CameraSource) {
@@ -121,4 +139,22 @@ export class AddProductComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(IMAGE_BASE64_PREFIX + b64Data);
   }
 
+  // https://stackoverflow.com/questions/58502673/angular-8-parsing-base64-to-file
+  private dataURItoBlob(dataURI) {
+    const byteString = window.atob(dataURI);
+    console.log(byteString);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], {type: 'image/png'});
+    return blob;
+  }
+
+  private convertBase64ToImageFile(base64: string, imageName: string, imageType: string): File {
+    const blob = this.dataURItoBlob(base64);
+    return new File([blob], imageName, {type: 'image/' + imageType});
+  }
 }

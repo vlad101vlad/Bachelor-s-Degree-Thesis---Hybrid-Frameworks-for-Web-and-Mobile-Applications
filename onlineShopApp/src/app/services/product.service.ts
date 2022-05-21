@@ -12,6 +12,10 @@ export class ProductService {
   constructor(private firestore: Firestore) {
   }
 
+  addProduct(newProduct: ProductDTO) {
+    
+  }
+
   getProducts(): Observable<ProductDTO[]> {
     const productsReference = collection(this.firestore, 'products');
     return collectionData(productsReference, {idField: 'id'}) as Observable<ProductDTO[]>;
