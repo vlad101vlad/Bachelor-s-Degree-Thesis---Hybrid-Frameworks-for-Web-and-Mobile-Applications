@@ -9,7 +9,8 @@ import {finalize} from 'rxjs/operators';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CategoryEnum} from '../../../services/model/category.enum';
 import {ProductService} from '../../../services/product.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
+import {SharedService} from "../../../services/shared.service";
 
 
 const FIRESTORE_BASE_PATH = '/images';
@@ -34,6 +35,7 @@ export class AddProductComponent implements OnInit {
   private imageSourceWasChanged = new BehaviorSubject<any>(null);
 
   constructor(
+    private sharedService: SharedService,
     private formBuilder: FormBuilder,
     private platform: Platform,
     private actionSheetController: ActionSheetController,
@@ -127,6 +129,8 @@ export class AddProductComponent implements OnInit {
     const filePath = FIRESTORE_BASE_PATH + '/' + file.name;
     const storageReference = this.firebaseStorage.ref(filePath);
     const uploadTask = this.firebaseStorage.upload(filePath, file);
+
+    this.sharedService.uploadProgress$ = uploadTask.percentageChanges();
 
     uploadTask.snapshotChanges().pipe(
       finalize(() => {

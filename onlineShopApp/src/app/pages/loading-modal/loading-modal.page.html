@@ -1,0 +1,12 @@
+<ion-content class="ion-padding">
+  <ion-row class="ion-margin-bottom">
+    <ion-label>Please wait while the request is being done</ion-label>
+  </ion-row>
+  <ion-row class="loading-spinner">
+      <ion-spinner class="ion-text-center" color="primary"  name="bubbles"></ion-spinner>
+  </ion-row>
+  <ion-row *ngIf="uploadProgress$ | async as progress">
+    <ion-label>{{ progress }}</ion-label>
+    <ion-progress-bar value="{{progress}}" ></ion-progress-bar>
+  </ion-row>
+</ion-content>

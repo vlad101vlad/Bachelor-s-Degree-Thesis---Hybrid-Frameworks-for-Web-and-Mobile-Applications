@@ -32,6 +32,10 @@ const routes: Routes = [
     redirectTo: '404',
     pathMatch: 'full',
   },
+  {
+    path: 'loading-modal',
+    loadChildren: () => import('./pages/loading-modal/loading-modal.module').then( m => m.LoadingModalPageModule)
+  },
 ];
 
 @NgModule({
