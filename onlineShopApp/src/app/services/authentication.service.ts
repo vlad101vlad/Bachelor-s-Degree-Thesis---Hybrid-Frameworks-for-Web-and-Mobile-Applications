@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {Auth} from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,9 @@ import {BehaviorSubject, Observable} from 'rxjs';
 export class AuthenticationService {
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
 
-  constructor() { }
+  constructor(
+    private firebaseAuth: Auth
+  ) { }
 
   login() {
     this.isAuthenticated.next(true);

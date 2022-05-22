@@ -33,11 +33,6 @@
           <ion-row>
             <img [src]="product.imageUrl" />
           </ion-row>
-
-          <ion-button *ngIf="isAdminLoggedIn" expand="full" (click)="editImage()">
-            Edit image
-            <ion-icon slot="end" name="camera"></ion-icon>
-          </ion-button>
         </ion-col>
 
         <!--      Product details-->
@@ -60,7 +55,7 @@
               </ion-button>
 
               <!--            Admin buttons-->
-              <ng-container *ngIf="isAdminLoggedIn">
+              <ng-container *ngIf="!isAdminLoggedIn">
                 <ion-button expand="full" (click)="edit()">
                   Edit
                   <ion-icon slot="end" name="open"></ion-icon>

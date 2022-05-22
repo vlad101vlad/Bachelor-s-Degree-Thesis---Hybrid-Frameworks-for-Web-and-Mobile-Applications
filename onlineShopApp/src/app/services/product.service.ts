@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {collection, collectionData, doc, docData, Firestore, setDoc} from '@angular/fire/firestore';
+import {collection, collectionData, deleteDoc, doc, docData, Firestore, setDoc} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
 import {ProductDTO} from './model/product-dto';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
@@ -19,6 +19,11 @@ export class ProductService {
     await setDoc(doc(productsReference), newProduct);
   }
 
+  async deleteProduct(productId: string) {
+    const productsReference = collection(this.firestore, PRODUCTS_COLLECTION_KEY);
+    const documentReference = doc(this.firestore, PRODUCTS_COLLECTION_KEY, productId);
+    await deleteDoc(documentReference);
+  }
 
   getProducts(): Observable<ProductDTO[]> {
     const productsReference = collection(this.firestore, PRODUCTS_COLLECTION_KEY);
@@ -30,7 +35,5 @@ export class ProductService {
     return docData(productDocumentReference, {idField: 'id'}) as Observable<ProductDTO>;
   }
 
-  // getCategoryEnumFromValue(categoryString: string): CategoryEnum {
-  //   return categoryString as CategoryEnum;
-  // }
+
 }

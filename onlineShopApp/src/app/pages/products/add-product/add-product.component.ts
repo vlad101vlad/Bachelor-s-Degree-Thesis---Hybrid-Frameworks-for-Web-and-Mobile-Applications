@@ -9,6 +9,7 @@ import {finalize} from 'rxjs/operators';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CategoryEnum} from '../../../services/model/category.enum';
 import {ProductService} from '../../../services/product.service';
+import {Router} from "@angular/router";
 
 
 const FIRESTORE_BASE_PATH = '/images';
@@ -39,7 +40,8 @@ export class AddProductComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private firestore: AngularFireDatabase,
     private firebaseStorage: AngularFireStorage,
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) {
     this.subscribeToImageSourceChanged();
     this.initFormGroup();
@@ -49,7 +51,6 @@ export class AddProductComponent implements OnInit {
   // https://stackoverflow.com/questions/58502673/angular-8-parsing-base64-to-file
   private static dataURItoBlob(dataURI) {
     const byteString = window.atob(dataURI);
-    console.log(byteString);
     const arrayBuffer = new ArrayBuffer(byteString.length);
     const int8Array = new Uint8Array(arrayBuffer);
 
@@ -108,6 +109,7 @@ export class AddProductComponent implements OnInit {
       this.uploadWithUserImage(file);
     } else {
       this.productService.addProduct(this.buildNewProduct());
+      this.router.navigateByUrl('/products', {replaceUrl: true});
     }
   }
 
@@ -122,16 +124,17 @@ export class AddProductComponent implements OnInit {
   }
 
   uploadWithUserImage(file: File) {
-    const storageReference = this.firebaseStorage.ref(FIRESTORE_BASE_PATH);
-    const uploadTask = this.firebaseStorage.upload(FIRESTORE_BASE_PATH + file.name, file);
+    const filePath = FIRESTORE_BASE_PATH + '/' + file.name;
+    const storageReference = this.firebaseStorage.ref(filePath);
+    const uploadTask = this.firebaseStorage.upload(filePath, file);
 
     uploadTask.snapshotChanges().pipe(
       finalize(() => {
         storageReference.getDownloadURL().subscribe(downloadUrl => {
           this.imageToUploadUrl = downloadUrl;
           const newProduct = this.buildNewProduct();
-          console.log(newProduct);
           this.productService.addProduct(newProduct);
+          this.router.navigateByUrl('/products', {replaceUrl: true});
         });
       })
     ).subscribe();

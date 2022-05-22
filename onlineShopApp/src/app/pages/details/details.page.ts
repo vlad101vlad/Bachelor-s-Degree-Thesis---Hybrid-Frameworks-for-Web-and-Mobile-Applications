@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ProductService} from '../../services/product.service';
 import {ProductDTO} from '../../services/model/product-dto';
 import {CategoryEnum} from '../../services/model/category.enum';
+import {relativeFrom} from "@angular/compiler-cli";
 
 @Component({
   selector: 'app-details',
@@ -20,7 +21,8 @@ export class DetailsPage implements OnInit {
     private route: ActivatedRoute,
     private cartService: CartService,
     private authenticationService: AuthenticationService,
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -56,11 +58,8 @@ export class DetailsPage implements OnInit {
 
   }
 
-  delete() {
-
-  }
-
-  editImage() {
-
+  async delete() {
+    await this.productService.deleteProduct(this.product.id);
+    this.router.navigateByUrl('/products', {replaceUrl: true} );
   }
 }
