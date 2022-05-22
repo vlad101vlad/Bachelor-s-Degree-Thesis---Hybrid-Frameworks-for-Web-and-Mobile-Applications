@@ -11,8 +11,6 @@ import {CategoryEnum} from '../../../services/model/category.enum';
 import {ProductService} from '../../../services/product.service';
 
 
-
-
 const FIRESTORE_BASE_PATH = '/images';
 const DEFAULT_IMAGE_STORAGE_URL = 'https://firebasestorage.googleapis.com/v0/b/shopapplicenta2022.appspot.com/o/images%2Fadd-image.jpg?alt=media&token=0d982f09-e1ea-4a90-b22a-ab551ac6339d';
 
@@ -25,12 +23,12 @@ export class AddProductComponent implements OnInit {
   @ViewChild('fileInput', {static: false}) fileInput: ElementRef;
   @ViewChild('userImage', {static: false}) userImage: ElementRef;
 
-  imageSource = null;
-  defaultImageLocation = 'assets/company/imgs/add-image.jpg';
+  templateImageSource = null;
+  defaultImageLocalLocation = 'assets/company/imgs/add-image.jpg';
 
   newProductForm: FormGroup;
   imageToUploadUrl: string;
-  currentImage: Photo = null;
+  currentImageToBeUploaded: Photo = null;
 
   private imageSourceWasChanged = new BehaviorSubject<any>(null);
 
@@ -47,11 +45,45 @@ export class AddProductComponent implements OnInit {
     this.initFormGroup();
   }
 
+  // Util functions for image processing and converting
+  // https://stackoverflow.com/questions/58502673/angular-8-parsing-base64-to-file
+  private static dataURItoBlob(dataURI) {
+    const byteString = window.atob(dataURI);
+    console.log(byteString);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], {type: 'image/png'});
+    return blob;
+  }
+
+  private static convertBase64ToImageFile(base64: string, imageName: string, imageType: string): File {
+    const blob = AddProductComponent.dataURItoBlob(base64);
+    return new File([blob], imageName, {type: 'image/' + imageType});
+  }
+
+  async changeImage(cameraSource: CameraSource) {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.Base64,
+      source: cameraSource
+    });
+    if (image) {
+      this.imageSourceWasChanged.next(this.b64toSrcFormat(image.base64String, image.format));
+      this.currentImageToBeUploaded = image;
+    }
+  }
+
   ngOnInit() {
-    this.imageSource = this.defaultImageLocation;
+    this.templateImageSource = this.defaultImageLocalLocation;
     this.imageToUploadUrl = DEFAULT_IMAGE_STORAGE_URL;
   }
 
+  // Init functions
   initFormGroup() {
     this.newProductForm = this.formBuilder.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
@@ -61,17 +93,17 @@ export class AddProductComponent implements OnInit {
     });
   }
 
-
   subscribeToImageSourceChanged() {
     this.imageSourceWasChanged.asObservable().subscribe((newUrl) => {
-      this.imageSource = newUrl;
+      this.templateImageSource = newUrl;
     });
   }
 
+  // CRUD operations
   save() {
-    if (this.currentImage) {
-      const file = this.convertBase64ToImageFile(this.currentImage.base64String,
-        this.generateNameForStorageImage(), this.currentImage.format);
+    if (this.currentImageToBeUploaded) {
+      const file = AddProductComponent.convertBase64ToImageFile(this.currentImageToBeUploaded.base64String,
+        this.generateNameForStorageImage(), this.currentImageToBeUploaded.format);
 
       this.uploadWithUserImage(file);
     } else {
@@ -110,30 +142,14 @@ export class AddProductComponent implements OnInit {
   }
 
   async selectImageSource() {
-    const sheetButtons = [
-      {
-        text: 'Take photo',
-        icon: 'camera',
-        handler: () => {
-          this.addImage(CameraSource.Camera);
-        }
-      },
-      {
-        text: 'Choose from photos',
-        icon: 'image',
-        handler: () => {
-          this.addImage(CameraSource.Photos);
-        }
-      }
-    ];
+    const sheetButtons = this.getSheetButtons();
 
     if (!this.platform.is('hybrid')) {
       sheetButtons.push({
         text: 'Choose a file',
         icon: 'attach',
         handler: () => {
-          // this.fileInput.nativeElement.click();
-          this.changeImage();
+          this.changeImage(CameraSource.Photos);
         }
       });
     }
@@ -145,55 +161,32 @@ export class AddProductComponent implements OnInit {
     await actionSheet.present();
   }
 
-  uploadFile($event: Event) {
-    const target: HTMLInputElement = event.target as HTMLInputElement;
-    const file: File = target.files[0];
-    console.log(file);
-  }
-
-  async changeImage() {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.Base64,
-      source: CameraSource.Photos
-    });
-    if (image) {
-      this.imageSourceWasChanged.next(this.b64toSrcFormat(image.base64String, image.format));
-      this.currentImage = image;
-    }
-  }
-
   getCategoriesArray() {
     return Object.values(CategoryEnum);
   }
 
-  private addImage(cameraSource: CameraSource) {
-
-  }
-
+  // Util for image processing and converting
   private b64toSrcFormat(b64Data: string, format: string) {
     const IMAGE_BASE64_PREFIX = 'data:image/' + format + ';base64,';
     return this.sanitizer.bypassSecurityTrustResourceUrl(IMAGE_BASE64_PREFIX + b64Data);
   }
 
-  // https://stackoverflow.com/questions/58502673/angular-8-parsing-base64-to-file
-  private dataURItoBlob(dataURI) {
-    const byteString = window.atob(dataURI);
-    console.log(byteString);
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const int8Array = new Uint8Array(arrayBuffer);
-
-    for (let i = 0; i < byteString.length; i++) {
-      int8Array[i] = byteString.charCodeAt(i);
-    }
-    const blob = new Blob([int8Array], {type: 'image/png'});
-    return blob;
+  private getSheetButtons() {
+    return [
+      {
+        text: 'Take photo',
+        icon: 'camera',
+        handler: () => {
+          this.changeImage(CameraSource.Camera);
+        }
+      },
+      {
+        text: 'Choose from photos',
+        icon: 'image',
+        handler: () => {
+          this.changeImage(CameraSource.Photos);
+        }
+      }
+    ];
   }
-
-  private convertBase64ToImageFile(base64: string, imageName: string, imageType: string): File {
-    const blob = this.dataURItoBlob(base64);
-    return new File([blob], imageName, {type: 'image/' + imageType});
-  }
-
 }
