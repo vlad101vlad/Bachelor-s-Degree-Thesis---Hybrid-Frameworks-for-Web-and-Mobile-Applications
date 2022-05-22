@@ -1,14 +1,20 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActionSheetController, Platform} from '@ionic/angular';
-import {Camera, CameraResultType, CameraSource} from '@capacitor/camera';
-import {Firestore} from '@angular/fire/firestore';
+import {Camera, CameraResultType, CameraSource, Photo} from '@capacitor/camera';
 import {DomSanitizer} from '@angular/platform-browser';
 import {BehaviorSubject} from 'rxjs';
-import {AngularFireStorage} from "@angular/fire/compat/storage";
-import {AngularFireDatabase} from "@angular/fire/compat/database";
-import {finalize} from "rxjs/operators";
+import {AngularFireStorage} from '@angular/fire/compat/storage';
+import {AngularFireDatabase} from '@angular/fire/compat/database';
+import {finalize} from 'rxjs/operators';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CategoryEnum} from '../../../services/model/category.enum';
+import {ProductService} from '../../../services/product.service';
+
+
+
 
 const FIRESTORE_BASE_PATH = '/images';
+const DEFAULT_IMAGE_STORAGE_URL = 'https://firebasestorage.googleapis.com/v0/b/shopapplicenta2022.appspot.com/o/images%2Fadd-image.jpg?alt=media&token=0d982f09-e1ea-4a90-b22a-ab551ac6339d';
 
 @Component({
   selector: 'app-add-product',
@@ -22,26 +28,39 @@ export class AddProductComponent implements OnInit {
   imageSource = null;
   defaultImageLocation = 'assets/company/imgs/add-image.jpg';
 
-  title: string;
-  description: string;
-  category: string;
-  price: number;
+  newProductForm: FormGroup;
+  imageToUploadUrl: string;
+  currentImage: Photo = null;
 
   private imageSourceWasChanged = new BehaviorSubject<any>(null);
 
   constructor(
+    private formBuilder: FormBuilder,
     private platform: Platform,
     private actionSheetController: ActionSheetController,
     private sanitizer: DomSanitizer,
     private firestore: AngularFireDatabase,
-    private firebaseStorage: AngularFireStorage
+    private firebaseStorage: AngularFireStorage,
+    private productService: ProductService
   ) {
     this.subscribeToImageSourceChanged();
+    this.initFormGroup();
   }
 
   ngOnInit() {
     this.imageSource = this.defaultImageLocation;
+    this.imageToUploadUrl = DEFAULT_IMAGE_STORAGE_URL;
   }
+
+  initFormGroup() {
+    this.newProductForm = this.formBuilder.group({
+      title: ['', [Validators.required, Validators.minLength(5)]],
+      description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(200)]],
+      category: ['', [Validators.required]],
+      price: [0, [Validators.required]],
+    });
+  }
+
 
   subscribeToImageSourceChanged() {
     this.imageSourceWasChanged.asObservable().subscribe((newUrl) => {
@@ -50,7 +69,44 @@ export class AddProductComponent implements OnInit {
   }
 
   save() {
+    if (this.currentImage) {
+      const file = this.convertBase64ToImageFile(this.currentImage.base64String,
+        this.generateNameForStorageImage(), this.currentImage.format);
 
+      this.uploadWithUserImage(file);
+    } else {
+      this.productService.addProduct(this.buildNewProduct());
+    }
+  }
+
+  buildNewProduct() {
+    return {
+      title: this.newProductForm.get('title').value,
+      description: this.newProductForm.get('description').value,
+      category: this.newProductForm.get('category').value,
+      price: this.newProductForm.get('price').value,
+      imageUrl: this.imageToUploadUrl
+    };
+  }
+
+  uploadWithUserImage(file: File) {
+    const storageReference = this.firebaseStorage.ref(FIRESTORE_BASE_PATH);
+    const uploadTask = this.firebaseStorage.upload(FIRESTORE_BASE_PATH + file.name, file);
+
+    uploadTask.snapshotChanges().pipe(
+      finalize(() => {
+        storageReference.getDownloadURL().subscribe(downloadUrl => {
+          this.imageToUploadUrl = downloadUrl;
+          const newProduct = this.buildNewProduct();
+          console.log(newProduct);
+          this.productService.addProduct(newProduct);
+        });
+      })
+    ).subscribe();
+  }
+
+  generateNameForStorageImage() {
+    return new Date().getTime().toString();
   }
 
   async selectImageSource() {
@@ -104,33 +160,15 @@ export class AddProductComponent implements OnInit {
     });
     if (image) {
       this.imageSourceWasChanged.next(this.b64toSrcFormat(image.base64String, image.format));
-      const file = this.convertBase64ToImageFile(image.base64String, 'new photo', image.format);
-      console.log(file);
-      this.uploadImageToFirebase(file);
+      this.currentImage = image;
     }
   }
 
-  uploadImageToFirebase(file: File) {
-    const storageReference = this.firebaseStorage.ref(FIRESTORE_BASE_PATH);
-    const uploadTask = this.firebaseStorage.upload(FIRESTORE_BASE_PATH + file.name, file);
-
-    uploadTask.snapshotChanges().pipe(
-      finalize(() => {
-        storageReference.getDownloadURL().subscribe(downloadUrl => {
-          console.log(downloadUrl);
-        });
-      })
-    ).subscribe();
+  getCategoriesArray() {
+    return Object.values(CategoryEnum);
   }
 
   private addImage(cameraSource: CameraSource) {
-
-  }
-
-  private showImage(file: File) {
-    const formData = new FormData();
-    formData.append('file', file.name);
-    formData.append('name', file.name);
 
   }
 
@@ -157,4 +195,5 @@ export class AddProductComponent implements OnInit {
     const blob = this.dataURItoBlob(base64);
     return new File([blob], imageName, {type: 'image/' + imageType});
   }
+
 }
