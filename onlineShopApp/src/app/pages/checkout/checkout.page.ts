@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AnimationController, NavController, ToastController} from '@ionic/angular';
-import {Geolocation} from "@capacitor/geolocation";
+import {AlertController, AnimationController, NavController, ToastController} from '@ionic/angular';
+import {Geolocation} from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-checkout',
@@ -15,9 +15,12 @@ export class CheckoutPage implements OnInit {
   total = 0;
   progress = 0;
 
+  deliveryAddress = 'Add an Address';
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private alertController: AlertController,
     private animationController: AnimationController,
     private navigationController: NavController,
     private toastController: ToastController
@@ -65,7 +68,6 @@ export class CheckoutPage implements OnInit {
   async requestGeolocationPermission() {
     try {
       const status = await Geolocation.requestPermissions();
-      console.log(status);
       // eslint-disable-next-line eqeqeq
       if(status?.location == 'granted'){
         this.locate();
@@ -73,7 +75,7 @@ export class CheckoutPage implements OnInit {
         console.log('Location not permitted');
       }
     } catch (error) {
-      console.log(error);
+      await this.enterAddressAlert();
     }
   }
 
@@ -85,6 +87,44 @@ export class CheckoutPage implements OnInit {
     await toast.present();
     this.navigationController.setDirection('root');
     this.router.navigateByUrl('/home');
+  }
+
+  async enterAddressAlert() {
+    const alert = await this.alertController.create({
+      header: 'Please enter the delivery address:',
+      inputs: [
+        {
+          name: 'City',
+          type: 'text',
+          placeholder: 'City'
+        },
+        {
+          name: 'Street',
+          type: 'text',
+          placeholder: 'Street'
+        },
+        {
+          name: 'Building',
+          type: 'text',
+          placeholder: 'Building no., floor, ap.'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Save',
+          handler: (response) => {
+            this.deliveryAddress = response.City + ', ' + response.Street + ', ' + response.Building;
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        }
+      ]
+    });
+    await alert.present();
+    console.log(alert.inputs);
   }
 
   private fakeProgress() {
