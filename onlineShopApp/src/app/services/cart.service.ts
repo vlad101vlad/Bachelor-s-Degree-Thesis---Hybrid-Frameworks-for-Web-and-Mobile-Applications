@@ -91,6 +91,7 @@ export class CartService {
 
       cartDto.products = cartDto.products
         .filter((cartProduct) => toRemoveProduct.id !== cartProduct.id);
+      this.cartItemCount.next(this.computeCartNumberOfItems(cartDto.products));
       return Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
     });
   }
