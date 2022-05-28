@@ -2,6 +2,10 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 
 import {MenuPage} from './menu.page';
+import {redirectLoggedInTo, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['']);
+const redirectLoggedInToProducts = () => redirectLoggedInTo(['/products']);
 
 const routes: Routes = [
   {

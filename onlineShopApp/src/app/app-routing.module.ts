@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
+
 const routes: Routes = [
   {
     path: '',
@@ -28,13 +29,13 @@ const routes: Routes = [
       import('./pages/error/error.module').then((m) => m.ErrorPageModule),
   },
   {
+    path: 'loading-modal',
+    loadChildren: () => import('./pages/loading-modal/loading-modal.module').then( m => m.LoadingModalPageModule)
+  },
+  {
     path: '**',
     redirectTo: '404',
     pathMatch: 'full',
-  },
-  {
-    path: 'loading-modal',
-    loadChildren: () => import('./pages/loading-modal/loading-modal.module').then( m => m.LoadingModalPageModule)
   },
 ];
 

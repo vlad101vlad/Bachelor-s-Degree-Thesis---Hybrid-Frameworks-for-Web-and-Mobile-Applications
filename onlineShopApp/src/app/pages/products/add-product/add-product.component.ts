@@ -10,7 +10,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CategoryEnum} from '../../../services/model/category.enum';
 import {ProductService} from '../../../services/product.service';
 import {Router} from '@angular/router';
-import {SharedService} from "../../../services/shared.service";
+import {SharedService} from '../../../services/shared.service';
 
 
 const FIRESTORE_BASE_PATH = '/images';

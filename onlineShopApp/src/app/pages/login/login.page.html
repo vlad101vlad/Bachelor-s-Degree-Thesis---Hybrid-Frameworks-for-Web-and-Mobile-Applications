@@ -2,7 +2,7 @@
   <ion-toolbar>
 
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/" color="light" text="">
+      <ion-back-button defaultHref="/" color="primary" text="">
       </ion-back-button>
     </ion-buttons>
 
@@ -11,7 +11,7 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button fill="clear" color="light">Help</ion-button>
+      <ion-button fill="clear" color="primary">Help</ion-button>
     </ion-buttons>
 
   </ion-toolbar>
@@ -20,13 +20,16 @@
 <ion-content fullscreen="true" scrollY="false">
   <div class="login">
     <ion-item lines="none">
+<!--        <ion-icon slot="start" name="contacts"></ion-icon>-->
       <ion-input
         [(ngModel)]="email"
+        type="email"
         placeholder="Please enter your email"
       ></ion-input>
     </ion-item>
 
     <ion-item lines="none">
+<!--        <ion-icon slot="start" name="md-key"></ion-icon>-->
       <ion-input
         [(ngModel)]="password"
         [type]="showPassword ? 'text' : 'password'"
@@ -41,9 +44,7 @@
       expand="block"
       class="login-btn"
       [class.login-valid]="email != '' && password != ''"
-      routerLink="/"
-      routerDirection="root"
-      (click)="loginAdmin()"
+      (click)="login()"
     >Sign In</ion-button>
 
   </div>

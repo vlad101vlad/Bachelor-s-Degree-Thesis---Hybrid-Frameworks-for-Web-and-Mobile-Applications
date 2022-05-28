@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import categoriesData from '../../../assets/company/categories.json';
-import {AnimationController, ModalController} from '@ionic/angular';
+import {AnimationController, LoadingController, ModalController} from '@ionic/angular';
 import {CartService} from '../../services/cart.service';
 import {CartModalPage} from '../../pages/cart-modal/cart-modal.page';
 import {AuthenticationService} from '../../services/authentication.service';
@@ -28,7 +28,8 @@ export class HeaderComponent implements OnInit {
     private animationController: AnimationController,
     private cartService: CartService,
     private modalController: ModalController,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private loadingController: LoadingController,
   ) { }
 
   ngOnInit() {
@@ -103,7 +104,17 @@ export class HeaderComponent implements OnInit {
     return productCategory.toLowerCase();
   }
 
-  logoutAdmin() {
-    this.authenticationService.logout();
+
+  async logoutAdmin() {
+    const loading = await this.loadingController.create();
+    await loading.present();
+
+    this.authenticationService.logoutAdmin()
+      .then(_ => this.authenticationService.showAlert('Successfully logged out!', 'You are now logged out!'))
+      .catch((error) => {
+        this.authenticationService.showAlert('Logout failed!', error.message + '\n Please try again');
+      });
+
+    await loading.dismiss();
   }
 }
