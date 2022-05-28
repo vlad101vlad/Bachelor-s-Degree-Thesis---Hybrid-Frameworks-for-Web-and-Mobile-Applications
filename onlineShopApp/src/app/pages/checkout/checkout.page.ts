@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AnimationController, NavController, ToastController} from '@ionic/angular';
+import {Geolocation} from "@capacitor/geolocation";
 
 @Component({
   selector: 'app-checkout',
@@ -54,6 +55,26 @@ export class CheckoutPage implements OnInit {
     wrapper.then(() => {
       this.fakeProgress();
     });
+  }
+
+  async locate() {
+    const coordinates = await Geolocation.getCurrentPosition();
+    console.log(coordinates);
+  }
+
+  async requestGeolocationPermission() {
+    try {
+      const status = await Geolocation.requestPermissions();
+      console.log(status);
+      // eslint-disable-next-line eqeqeq
+      if(status?.location == 'granted'){
+        this.locate();
+      } else {
+        console.log('Location not permitted');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async close() {

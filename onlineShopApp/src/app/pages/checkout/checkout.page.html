@@ -26,7 +26,7 @@
 
   <ion-label color="dark" class="header">Deliver to</ion-label>
   <ion-list>
-    <ion-item lines="none" detail="true">
+    <ion-item button="true" (click)="requestGeolocationPermission()" lines="none" detail="true">
       <ion-icon name="home-outline" slot="start"></ion-icon>
       <ion-label>Add an Address</ion-label>
     </ion-item>

@@ -55,7 +55,7 @@
               </ion-button>
 
               <!--            Admin buttons-->
-              <ng-container *ngIf="!isAdminLoggedIn">
+              <ng-container *ngIf="isAdminLoggedIn">
                 <ion-button expand="full" (click)="edit()">
                   Edit
                   <ion-icon slot="end" name="open"></ion-icon>

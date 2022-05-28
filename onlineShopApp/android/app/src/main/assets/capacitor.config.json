@@ -2,5 +2,9 @@
 	"appId": "io.ionic.starter",
 	"appName": "ionic-app-base",
 	"webDir": "www",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"server": {
+		"url": "http://192.168.100.10:8100",
+		"originalUrl": "192.168.100.10"
+	}
 }
