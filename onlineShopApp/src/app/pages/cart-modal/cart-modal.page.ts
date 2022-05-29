@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CartService} from '../../services/cart.service';
-import {ModalController, Platform, ToastController} from '@ionic/angular';
+import {ModalController, Platform} from '@ionic/angular';
 import {CartDto} from '../../services/model/cart-dto';
 import {CartProductDto} from '../../services/model/cart-product-dto';
 

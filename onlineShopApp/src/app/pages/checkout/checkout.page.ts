@@ -1,16 +1,16 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AlertController, AnimationController, NavController, ToastController} from '@ionic/angular';
-import {Geolocation} from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.page.html',
   styleUrls: ['./checkout.page.scss'],
 })
+
 export class CheckoutPage implements OnInit {
-  @ViewChild('orderbar', { read: ElementRef }) orderBar: ElementRef;
-  @ViewChild('successbar', { read: ElementRef }) successBar: ElementRef;
+  @ViewChild('orderbar', {read: ElementRef}) orderBar: ElementRef;
+  @ViewChild('successbar', {read: ElementRef}) successBar: ElementRef;
 
   total = 0;
   progress = 0;
@@ -26,7 +26,7 @@ export class CheckoutPage implements OnInit {
     private toastController: ToastController
   ) {
     this.route.queryParams.subscribe((params) => {
-      if(this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation().extras.state) {
         this.total = this.router.getCurrentNavigation().extras.state.sum;
       }
     });
@@ -36,7 +36,7 @@ export class CheckoutPage implements OnInit {
   }
 
   startOrder() {
-    const  barMove = this.animationController
+    const barMove = this.animationController
       .create('move')
       .addElement(this.orderBar.nativeElement)
       .fromTo('opacity', 1, 0)
@@ -60,23 +60,8 @@ export class CheckoutPage implements OnInit {
     });
   }
 
-  async locate() {
-    const coordinates = await Geolocation.getCurrentPosition();
-    console.log(coordinates);
-  }
-
   async requestGeolocationPermission() {
-    try {
-      const status = await Geolocation.requestPermissions();
-      // eslint-disable-next-line eqeqeq
-      if(status?.location == 'granted'){
-        this.locate();
-      } else {
-        console.log('Location not permitted');
-      }
-    } catch (error) {
-      await this.enterAddressAlert();
-    }
+    await this.enterAddressAlert();
   }
 
   async close() {
