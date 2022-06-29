@@ -68,6 +68,7 @@ export class DetailsPage implements OnInit {
   async save() {
     if (this.toUpdate !== {}) {
       await this.productService.editProduct(this.toUpdate, this.product.id);
+      await this.cartService.updateCartItems(this.product);
       this.toUpdate = {};
       this.isEditModeOn = false;
     }
@@ -84,11 +85,22 @@ export class DetailsPage implements OnInit {
   }
 
   addElementToUpdate(key, value) {
-    this.toUpdate[key] = value;
+    if (isNaN(value)) {
+      this.toUpdate[key] = value;
+    } else {
+      this.toUpdate[key] = parseFloat(value);
+    }
   }
 
   cancelEdit() {
     this.isEditModeOn = false;
     this.toUpdate = {};
+  }
+
+  isNumeric(str) {
+    if (typeof str != 'string') {
+      return false;
+    }
+    return !isNaN(parseInt(str, 10)) && !isNaN(parseFloat(str)); // ...and ensure strings of whitespace fail
   }
 }

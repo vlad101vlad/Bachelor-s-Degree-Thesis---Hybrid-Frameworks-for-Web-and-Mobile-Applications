@@ -62,6 +62,7 @@ export class CartService {
           const newAmount = Number(existingProduct.amount) + 1;
           existingProduct.amount = newAmount.toString();
 
+          this.cartItemCount.next(this.computeCartNumberOfItems(cartDto.products));
           return Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
         }
       }
@@ -82,6 +83,23 @@ export class CartService {
       }
       return Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
     });
+  }
+
+  async updateCartItems(product: ProductDTO) {
+    await Storage.get({key: CART_KEY}).then((response) => {
+        const cartDto = CartService.mapCartDtoStringyfiedToCartDTO(response.value);
+
+        if (cartDto.products.length > 0) {
+          const existingProduct: CartProductDto = this.findProductAlreadyInCart(cartDto.products, product);
+          if (existingProduct) {
+            existingProduct.price = product.price.toString();
+            existingProduct.title = product.title;
+
+            return Storage.set({key: CART_KEY, value: JSON.stringify(cartDto)});
+          }
+        }
+      }
+    );
   }
 
   removeProduct(toRemoveProduct: ProductDTO): Promise<any> {
