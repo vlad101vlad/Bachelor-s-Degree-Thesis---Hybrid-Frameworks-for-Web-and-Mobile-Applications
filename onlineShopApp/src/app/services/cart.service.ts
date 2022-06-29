@@ -39,7 +39,6 @@ export class CartService {
 
   // JSON mappings
   static mapCartDtoStringyfiedToCartDTO(cartDtoStringyfied): CartDto {
-    console.log(cartDtoStringyfied);
     return JSON.parse(cartDtoStringyfied);
   }
 

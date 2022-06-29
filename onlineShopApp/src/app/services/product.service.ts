@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {collection, collectionData, deleteDoc, doc, docData, Firestore, setDoc} from '@angular/fire/firestore';
+import {collectionData, deleteDoc, docData, doc, Firestore, collection, setDoc} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
 import {ProductDTO} from './model/product-dto';
-import {AngularFireDatabase} from '@angular/fire/compat/database';
 
 const PRODUCTS_COLLECTION_KEY = 'products';
 

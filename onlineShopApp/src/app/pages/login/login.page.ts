@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../services/authentication.service';
 import {LoadingController} from '@ionic/angular';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -15,8 +16,8 @@ export class LoginPage implements OnInit {
 
   constructor(
     private autheticationService: AuthenticationService,
-    private loadingController: LoadingController,
-  ) {
+    private router: Router,
+    private loadingController: LoadingController) {
   }
 
   ngOnInit() {
@@ -30,6 +31,7 @@ export class LoginPage implements OnInit {
     this.autheticationService.loginAdmin({email: this.email, password: this.password})
       .then((userResponse) => {
         this.autheticationService.showAlert('Login success!', '\n You are now logged in!');
+        this.router.navigateByUrl('');
       })
       .catch((error) => {
         console.log(error);
