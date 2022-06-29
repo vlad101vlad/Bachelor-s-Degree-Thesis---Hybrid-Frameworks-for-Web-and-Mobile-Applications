@@ -20,7 +20,6 @@ export class CartService {
       products: [],
       raiderTip: '0'
     };
-
     Storage.keys().then((response) => {
       const keys = response.keys;
       if (!keys.find(iteratedKey => iteratedKey === CART_KEY)) {

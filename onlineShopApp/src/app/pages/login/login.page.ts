@@ -30,8 +30,10 @@ export class LoginPage implements OnInit {
 
     this.autheticationService.loginAdmin({email: this.email, password: this.password})
       .then((userResponse) => {
-        this.autheticationService.showAlert('Login success!', '\n You are now logged in!');
-        this.router.navigateByUrl('');
+        this.router.navigateByUrl('').then(_ => {
+          window.location.reload();
+          this.autheticationService.showAlert('Login success!', '\n You are now logged in!');
+        });
       })
       .catch((error) => {
         console.log(error);
