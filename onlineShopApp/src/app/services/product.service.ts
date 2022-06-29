@@ -1,5 +1,14 @@
 import {Injectable} from '@angular/core';
-import {collectionData, deleteDoc, docData, doc, Firestore, collection, setDoc} from '@angular/fire/firestore';
+import {
+  collectionData,
+  deleteDoc,
+  docData,
+  doc,
+  Firestore,
+  collection,
+  setDoc,
+  updateDoc
+} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
 import {ProductDTO} from './model/product-dto';
 
@@ -19,9 +28,13 @@ export class ProductService {
   }
 
   async deleteProduct(productId: string) {
-    const productsReference = collection(this.firestore, PRODUCTS_COLLECTION_KEY);
     const documentReference = doc(this.firestore, PRODUCTS_COLLECTION_KEY, productId);
     await deleteDoc(documentReference);
+  }
+
+  async editProduct(toUpdateFields, productId) {
+    const documentReference = doc(this.firestore, PRODUCTS_COLLECTION_KEY, productId);
+    await updateDoc(documentReference, toUpdateFields);
   }
 
   getProducts(): Observable<ProductDTO[]> {

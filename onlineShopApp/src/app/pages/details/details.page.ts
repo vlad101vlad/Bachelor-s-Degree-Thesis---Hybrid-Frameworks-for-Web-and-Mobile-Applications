@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import { CartService } from '../../services/cart.service';
+import {CartService} from '../../services/cart.service';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ProductService} from '../../services/product.service';
 import {ProductDTO} from '../../services/model/product-dto';
 import {CategoryEnum} from '../../services/model/category.enum';
-import {relativeFrom} from "@angular/compiler-cli";
 
 @Component({
   selector: 'app-details',
@@ -16,6 +15,8 @@ export class DetailsPage implements OnInit {
   product: ProductDTO = null;
   isAdminLoggedIn: boolean;
   isProductInformationLoaded: boolean;
+  isEditModeOn = false;
+  toUpdate = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -23,7 +24,8 @@ export class DetailsPage implements OnInit {
     private authenticationService: AuthenticationService,
     private productService: ProductService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.subscribeToProductDocument();
@@ -55,11 +57,33 @@ export class DetailsPage implements OnInit {
   }
 
   edit() {
-
+    this.isEditModeOn = true;
   }
 
   async delete() {
     await this.productService.deleteProduct(this.product.id);
-    this.router.navigateByUrl('/products', {replaceUrl: true} );
+    this.router.navigateByUrl('/products', {replaceUrl: true});
+  }
+
+  async save() {
+    if (this.toUpdate !== {}) {
+      await this.productService.editProduct(this.toUpdate, this.product.id);
+      this.toUpdate = {};
+      this.isEditModeOn = false;
+    }
+  }
+
+  tryUpdate(key, newValue, oldValue) {
+    if (this.checkIfNeedsUpdate(newValue, oldValue)) {
+      this.addElementToUpdate(key, newValue);
+    }
+  }
+
+  checkIfNeedsUpdate(oldValue, newValue) {
+    return oldValue !== newValue;
+  }
+
+  addElementToUpdate(key, value) {
+    this.toUpdate[key] = value;
   }
 }

@@ -22,7 +22,15 @@
         </ion-breadcrumb>
 
         <ion-breadcrumb>
-          {{ product.title }}
+          <ng-container *ngIf="!isEditModeOn else titleEdit">
+            {{ product.title }}
+          </ng-container>
+          <ng-template #titleEdit>
+            <app-edit-structure
+              (updatedData)="tryUpdate('title', $event, product.title)"
+              [inputType]="'text'"
+              [content]="product.title"></app-edit-structure>
+          </ng-template>
         </ion-breadcrumb>
 
       </ion-breadcrumbs>
@@ -40,31 +48,50 @@
           <ion-card class="add-card ion-text-center">
             <!--          Price header-->
             <ion-card-header>
-              <ion-card-title
-              >{{ product.price }}</ion-card-title
-              >
+              <ion-card-title *ngIf="!isEditModeOn else priceEdit"
+              >{{ product.price }}</ion-card-title>
+              <ng-template #priceEdit>
+                <app-edit-structure
+                  (updatedData)="tryUpdate('price', $event, product.price)"
+                  [inputType]="'number'"
+                  [content]="product.price"></app-edit-structure>
+              </ng-template>
             </ion-card-header>
 
             <!--          Content-->
             <ion-card-content>
-              <ion-text color="medium">{{ product.description }}</ion-text>
+              <ion-text *ngIf="!isEditModeOn; else descriptionEdit" color="medium">{{ product.description }}</ion-text>
+              <ng-template #descriptionEdit>
+                <app-edit-structure
+                  (updatedData)="tryUpdate('description', $event, product.description)"
+                  [inputType]="'text'"
+                  [content]="product.description"></app-edit-structure>
+              </ng-template>
 
-              <ion-button expand="full" (click)="addToCart()">
-                Add to cart
-                <ion-icon slot="end" name="add"></ion-icon>
-              </ion-button>
+              <ng-container *ngIf="!isEditModeOn else saveEdit">
+                <ion-button expand="full" (click)="addToCart()">
+                  Add to cart
+                  <ion-icon slot="end" name="add"></ion-icon>
+                </ion-button>
 
-              <!--            Admin buttons-->
-              <ng-container *ngIf="isAdminLoggedIn">
-                <ion-button expand="full" (click)="edit()">
-                  Edit
-                  <ion-icon slot="end" name="open"></ion-icon>
-                </ion-button>
-                <ion-button color="danger" expand="full" (click)="delete()">
-                  Delete
-                  <ion-icon slot="end" name="nuclear"></ion-icon>
-                </ion-button>
+                <!--            Admin buttons-->
+                <ng-container *ngIf="isAdminLoggedIn">
+                  <ion-button expand="full" (click)="edit()">
+                    Edit
+                    <ion-icon slot="end" name="open"></ion-icon>
+                  </ion-button>
+                  <ion-button color="danger" expand="full" (click)="delete()">
+                    Delete
+                    <ion-icon slot="end" name="nuclear"></ion-icon>
+                  </ion-button>
+                </ng-container>
               </ng-container>
+              <ng-template #saveEdit>
+                <ion-button expand="full" (click)="save()">
+                  Save edit
+                  <ion-icon name="save-outline"></ion-icon>
+                </ion-button>
+              </ng-template>
 
             </ion-card-content>
           </ion-card>
