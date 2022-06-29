@@ -86,4 +86,9 @@ export class DetailsPage implements OnInit {
   addElementToUpdate(key, value) {
     this.toUpdate[key] = value;
   }
+
+  cancelEdit() {
+    this.isEditModeOn = false;
+    this.toUpdate = {};
+  }
 }

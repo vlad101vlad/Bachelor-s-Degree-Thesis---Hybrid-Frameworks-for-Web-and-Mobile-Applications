@@ -87,9 +87,13 @@
                 </ng-container>
               </ng-container>
               <ng-template #saveEdit>
-                <ion-button expand="full" (click)="save()">
+                <ion-button slot="end" expand="full" (click)="save()">
                   Save edit
                   <ion-icon name="save-outline"></ion-icon>
+                </ion-button>
+                <ion-button color="danger" expand="full" (click)="cancelEdit()">
+                  Cancel
+                  <ion-icon slot="end" name="nuclear"></ion-icon>
                 </ion-button>
               </ng-template>
 
