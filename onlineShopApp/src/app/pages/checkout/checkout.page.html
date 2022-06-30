@@ -17,8 +17,8 @@
   <ion-list>
     <ion-item lines="none">
       <ion-label class="ion-text-wrap">
-        Tick this box of you would not like to receive Deliveroo marketing
-        offers and promotions via email.
+        Tick this box of you would not like to receive marketing
+        offers and promotions via email from our shop.
       </ion-label>
       <ion-checkbox slot="end"></ion-checkbox>
     </ion-item>
@@ -37,16 +37,23 @@
     <ion-item lines="none">
       <ion-icon name="logo-paypal" slot="start"></ion-icon>
       <ion-label>PayPal</ion-label>
+      <ion-checkbox [disabled]="true" slot="end"></ion-checkbox>
     </ion-item>
     <ion-item lines="none">
       <ion-icon name="logo-bitcoin" slot="start"></ion-icon>
       <ion-label>Bitcoin</ion-label>
+      <ion-checkbox [disabled]="true" slot="end"></ion-checkbox>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-icon name="send-outline" slot="start"></ion-icon>
+      <ion-label>At delivery</ion-label>
+      <ion-checkbox (ionChange)="paymentMethodChanged($event)" slot="end"></ion-checkbox>
     </ion-item>
   </ion-list>
 </ion-content>
 
 <ion-footer class="ion-no-border">
-  <ion-toolbar color="light">
+  <ion-toolbar #orderbar color="light">
     <ion-row>
       <ion-col size="6" class="ion-text-left">
         <ion-label color="medium">Total</ion-label>
@@ -56,6 +63,7 @@
       </ion-col>
     </ion-row>
     <ion-button
+      [disabled]="!canUserPay()"
       expand="block"
       strong="true"
       (click)="startOrder()"

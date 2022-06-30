@@ -2,20 +2,26 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AlertController, AnimationController, NavController, ToastController} from '@ionic/angular';
 
+const DEFAULT_ADDRESS = 'Add an Address';
+
+
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.page.html',
   styleUrls: ['./checkout.page.scss'],
 })
 
+
 export class CheckoutPage implements OnInit {
   @ViewChild('orderbar', {read: ElementRef}) orderBar: ElementRef;
   @ViewChild('successbar', {read: ElementRef}) successBar: ElementRef;
+  @ViewChild('delivery', {read: ElementRef}) deliveryCheckbox: ElementRef;
 
   total = 0;
   progress = 0;
 
   deliveryAddress = 'Add an Address';
+  isPaymentSelected = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -71,7 +77,7 @@ export class CheckoutPage implements OnInit {
     });
     await toast.present();
     this.navigationController.setDirection('root');
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('');
   }
 
   async enterAddressAlert() {
@@ -110,6 +116,15 @@ export class CheckoutPage implements OnInit {
     });
     await alert.present();
     console.log(alert.inputs);
+  }
+
+  paymentMethodChanged(event: any) {
+    const isChecked = event.target.checked;
+    this.isPaymentSelected = !!isChecked;
+  }
+
+  canUserPay() {
+    return this.deliveryAddress !== DEFAULT_ADDRESS && this.isPaymentSelected;
   }
 
   private fakeProgress() {
