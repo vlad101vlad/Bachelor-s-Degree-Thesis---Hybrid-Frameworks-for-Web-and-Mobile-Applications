@@ -1,12 +1,16 @@
 # Bachelor's Degree Thesis
 ## Hybrid Frameworks for Web and Mobile Applications:
 
+[Link to paper](https://github.com/vlad101vlad/Bachelor-s-Degree-Thesis---Hybrid-Frameworks-for-Web-and-Mobile-Applications/blob/main/Hybrid%20Frameworks%20for%20Web%20and%20Mobile%20Applications.pdf)
+
+### Abstract
 In the fast-paced environment that we currently live in, every resource is becoming
 scarcer, especially time. Thus, similar to other domains, methods of making the
 time we have more efficient and more profitable are constantly being developed,
 the community of software developers came up with their own solutions. One of
 those solutions is the use of hybrid frameworks for deploying the same projects on
 multiple platforms with the promise of only one codebase.
+
 The aim of this paper is to present how this solution was inevitable to come
 and to show the current options a developer has if one chooses to take this path.
 Across multiple chapters, this thesis provides a detailed view of the internal architecture
